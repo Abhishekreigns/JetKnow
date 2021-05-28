@@ -15,42 +15,22 @@ import com.reignscanary.jetknow.composables.HostOfComposables
 import com.reignscanary.jetknow.ui.theme.JetKnowTheme
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-lateinit var lastLocation : Location
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+var locationManager : LocationManager = getSystemService(LOCATION_SERVICE) as LocationManager
+setContent {
+
+    HostOfComposables(
+        savedInstanceState = savedInstanceState,
+        locationManager = locationManager
+
+    )
 
 
-            var showHomScreen = false
-            var locationManager: LocationManager = getSystemService(LOCATION_SERVICE) as LocationManager
-        setContent {
-                JetKnowTheme() {
-
-
-                    if (showHomScreen) {
-
-
-                      locationManager?.let {
-                            HostOfComposables(
-                                savedInstanceState = savedInstanceState,
-                                locationManager = it
-                            )
-                        }
-
-
-                    }
-
-                }
-
-        }
-
-
-
-
-    }
-
-
+} }
 
     companion object{
 
