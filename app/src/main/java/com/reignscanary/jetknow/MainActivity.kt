@@ -1,32 +1,61 @@
 package com.reignscanary.jetknow
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationManager
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.android.gms.maps.model.LatLng
-import com.reignscanary.jetknow.composables.CustomMapView
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.SideEffect
+import androidx.core.app.ActivityCompat
 import com.reignscanary.jetknow.composables.HostOfComposables
-import com.reignscanary.jetknow.composables.MainScreenViewModel
-import com.reignscanary.jetknow.composables.SearchText
 import com.reignscanary.jetknow.ui.theme.JetKnowTheme
-
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+lateinit var lastLocation : Location
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
+
+            var showHomScreen = false
+            var locationManager: LocationManager = getSystemService(LOCATION_SERVICE) as LocationManager
         setContent {
-            JetKnowTheme() {
-                HostOfComposables(savedInstanceState = savedInstanceState)
-            }
-
-            }
-          
+                JetKnowTheme() {
 
 
-            }
+                    if (showHomScreen) {
+
+
+                      locationManager?.let {
+                            HostOfComposables(
+                                savedInstanceState = savedInstanceState,
+                                locationManager = it
+                            )
+                        }
+
+
+                    }
+
+                }
+
+        }
+
+
+
+
+    }
+
+
+
+    companion object{
+
+        const val LOCATION_PERMISSION = 100
+    }
 
     }
 
