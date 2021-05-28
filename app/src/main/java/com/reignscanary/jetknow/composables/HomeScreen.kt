@@ -132,12 +132,9 @@ fun SearchText(modifier: Modifier = Modifier,searchText : String,onSearchTextCha
 {
     OutlinedTextField(value =  searchText,
         onValueChange = onSearchTextChange,
-        modifier
+                modifier
             .fillMaxHeight(0.1f)
             .fillMaxWidth()
             .padding(4.dp),
-
-
-
     )
 }
