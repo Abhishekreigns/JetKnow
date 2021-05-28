@@ -5,8 +5,10 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -25,41 +27,13 @@ import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.reignscanary.jetknow.MainActivity
-import com.reignscanary.jetknow.lastLocation
 
 
 @Composable
-fun HostOfComposables(mainScreenViewModel: MainScreenViewModel = viewModel(), locationManager: LocationManager, savedInstanceState : Bundle?)
-{
-var context = LocalContext.current
-    SideEffect {
-
-        if (ActivityCompat.checkSelfPermission(
-                context,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                context,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-
-            Toast.makeText(
-                context,
-                "${locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)?.longitude}",
-                Toast.LENGTH_SHORT
-            ).show()
-            lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)!!
-            mainScreenViewModel.onLatLngUpdate(LatLng(lastLocation.latitude, lastLocation.longitude))
-            return@SideEffect
-        }
-    }
-
-
-
-
-
+fun HostOfComposables(mainScreenViewModel: MainScreenViewModel = viewModel(),locationManager: LocationManager,savedInstanceState : Bundle?)
+{  var context = LocalContext.current
     var latLng = remember {
-        mutableStateOf(LatLng(0.0,0.0))
+        mutableStateOf(LatLng(12.834174,79.703644))
     }
     val searchText :String by mainScreenViewModel.searchText.observeAsState("" )
 val roundedBox = RoundedCornerShape(16.dp)
@@ -79,16 +53,42 @@ Column(modifier = Modifier
     ){mainScreenViewModel.onLatLngUpdate(it)}
     Spacer(modifier = Modifier.padding(2.dp))
     FloatingActionButton(onClick = {
+        if (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
 
-       latLng.value = mainScreenViewModel.latLng.value?.let { LatLng(it.latitude,
-           mainScreenViewModel.latLng.value!!.longitude) }!!
+            return@FloatingActionButton
+
+        }
+        else{
+
+            var location : Location? = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+            if (location != null) {
+                Toast.makeText(
+                    context,
+                    "${location.latitude} ${location.longitude}",
+                    Toast.LENGTH_SHORT
+                ).show()
+              //  latLng.value = LatLng(location.latitude, location.longitude)
+
+
+
+            }
+            latLng.value = LatLng(12.834174,79.703564)
+        }
+
+
+
+
 
     }) {
 
     }
-
-}
-SideEffect {
 
 }
     
