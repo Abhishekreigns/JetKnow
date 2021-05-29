@@ -33,18 +33,28 @@ fun HostOfComposables(mainScreenViewModel: MainScreenViewModel = viewModel(),loc
 {
     val latLng  : LatLng by mainScreenViewModel.latLng.observeAsState(LatLng(-33.88,151.21))
     val searchText :String by mainScreenViewModel.searchText.observeAsState("" )
-val roundedBox = RoundedCornerShape(16.dp)
-Column(modifier = Modifier
+    val roundedBox = RoundedCornerShape(16.dp)
+
+
+    //Align all the composables in a column
+    Column(
+        modifier = Modifier
     .padding(8.dp)
     .fillMaxSize(1f)
+        )
+
+    {
+        SearchText(searchText = searchText,
+            modifier = Modifier
+                .fillMaxWidth(0.9f)
         ) {
+            mainScreenViewModel.onSearchTextChange(it)
+        }
 
-    SearchText(searchText = searchText,modifier = Modifier.fillMaxWidth(0.9f)) { mainScreenViewModel.onSearchTextChange(it) }
 
+        Spacer(modifier = Modifier.padding(10.dp))
 
- Spacer(modifier = Modifier.padding(10.dp))
-
-    CustomMapView(
+        CustomMapView(
         DEFAULT_LOCATION = latLng,
         savedInstanceState = savedInstanceState,
         modifier = Modifier
@@ -55,14 +65,12 @@ Column(modifier = Modifier
         mainScreenViewModel.onLatLngUpdate(it)
     }
     Spacer(modifier = Modifier.padding(2.dp))
+
     FloatingActionButton(onClick = {
-           // Toast.makeText(context,"${location.latitude},${location.longitude}",Toast.LENGTH_SHORT).show()
+          //on Fab Click update the position value to the current location of the user
         mainScreenViewModel.onLatLngUpdate(LatLng(location.latitude,location.longitude))
-
-
-    }) {
-
     }
+    ) {}
 
 }
     
@@ -78,7 +86,6 @@ fun CustomMapView(
 )
 {
 
-//val mountainView = LatLng(DEFAULT_LOCATION.latitude + 4.0f, DEFAULT_LOCATION.longitude - 20f)
 
     val cameraPosition = CameraPosition.Builder()
         .target(DEFAULT_LOCATION) // Sets the center of the map to Mountain View
@@ -88,49 +95,54 @@ fun CustomMapView(
         .build()              // Creates a CameraPosition from the builder
 
     val mapView = MapView(LocalContext.current)
- AndroidView(
-     modifier = modifier.fillMaxSize(),
-     factory = { mapView.apply {
-         this.onCreate(savedInstanceState)
-         this.getMapAsync{
+    //Composing mapView using AndroidView()
+    AndroidView(
+        modifier = modifier.fillMaxSize(),
+        factory = { mapView.apply {
+            this.onCreate(savedInstanceState)
+            this.getMapAsync{
+
+              //Adding Marker to a location which is passed by default
+                it.addMarker(
+                    MarkerOptions().
+                    position(DEFAULT_LOCATION)
+                        .title("Location Of you")
+                )
+                //The gestures and zoom features are enabled here
+                it.uiSettings.setAllGesturesEnabled(true)
+                it.moveCamera(CameraUpdateFactory.newLatLngZoom(DEFAULT_LOCATION, 15f))
+                it.animateCamera(CameraUpdateFactory.zoomIn())
+                it.animateCamera(CameraUpdateFactory.zoomTo(10f), 2000, null)
+                it.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
 
 
-             it.addMarker(
-                 MarkerOptions().
-                 position(DEFAULT_LOCATION)
-                     .title("Location Of you")
-             )
-             it.uiSettings.setAllGesturesEnabled(true)
-             it.moveCamera(CameraUpdateFactory.newLatLngZoom(DEFAULT_LOCATION, 15f))
-             it.animateCamera(CameraUpdateFactory.zoomIn())
-             it.animateCamera(CameraUpdateFactory.zoomTo(10f), 2000, null)
-             it.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+
+            }
+
+           // this helps in loading the map faster on app startup
+            this.onResume()
 
 
+        }
 
-         }
+        },
+        update = {
 
+            //When the location changes like when clicking the Fab,the new location is updated in the map
+            it.getMapAsync{
+                it.animateCamera(CameraUpdateFactory.zoomIn())
+                it.animateCamera(CameraUpdateFactory.zoomTo(10f), 2000, null)
+                it.moveCamera(CameraUpdateFactory.newLatLngZoom(DEFAULT_LOCATION, 15f))
+                it.addMarker(
+                    MarkerOptions().
+                    position(DEFAULT_LOCATION)
+                        .title("Location Of you")
+                )
+            }
 
-         this.onResume()
+        }
+    )
 
-
-     }
-
-               },
-     update = {
-         it.getMapAsync{
-             it.animateCamera(CameraUpdateFactory.zoomIn())
-             it.animateCamera(CameraUpdateFactory.zoomTo(10f), 2000, null)
-         it.moveCamera(CameraUpdateFactory.newLatLngZoom(DEFAULT_LOCATION, 15f))
-             it.addMarker(
-                 MarkerOptions().
-                 position(DEFAULT_LOCATION)
-                     .title("Location Of you")
-             )
-     }
-
-     }
- )
 
 
 }
@@ -143,5 +155,5 @@ fun SearchText(modifier: Modifier = Modifier,searchText : String,onSearchTextCha
                 modifier
             .fillMaxHeight(0.1f)
             .fillMaxWidth()
-            .padding(4.dp),
+            .padding(4.dp))
 }

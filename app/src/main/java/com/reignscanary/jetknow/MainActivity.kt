@@ -26,31 +26,36 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
+        //Request location on opening the app for the first time
         ActivityCompat.requestPermissions( this,
             arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION)
+
         val locationManager: LocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        //check if GPS is on
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             turnGpsON()
         }
         else{
-
+                //Check if location permission granted
             if (ActivityCompat.checkSelfPermission(
                     this@MainActivity, Manifest.permission.ACCESS_FINE_LOCATION
                 ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
                     this@MainActivity, Manifest.permission.ACCESS_COARSE_LOCATION
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
+                //if not granted ask the permission
                 ActivityCompat.requestPermissions(
                     this,
                     arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                     LOCATION_PERMISSION
                 )
             } else {
+                //if granted assign the location to pass it to the hostOfComposable
                 val locationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
                 if (locationGPS != null) {
-                    val lat = locationGPS.latitude
-                    val longi = locationGPS.longitude
-                  // Toast.makeText(this,"Your Location: \nLatitude: $lat\nLongitude: $longi",Toast.LENGTH_SHORT).show()
+
                     setContent {
 
                         HostOfComposables(
@@ -61,7 +66,10 @@ class MainActivity : ComponentActivity() {
                     }
 
 
-                } else {Toast.makeText(this, "Unable to find location.", Toast.LENGTH_SHORT).show()
+                } else {
+
+                    //If location data is not retrieved mostly due to network or compass error show the toast
+                    Toast.makeText(this, "Unable to find location.", Toast.LENGTH_SHORT).show()
                     Toast.makeText(this,"\nIf this happens often,its better to open google maps and calibrate the issue",Toast.LENGTH_SHORT).show()
 
 
@@ -71,7 +79,7 @@ class MainActivity : ComponentActivity() {
 
 
     }
-
+//Method/Function to turn on GPS
     private fun turnGpsON() {
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
         builder.setMessage("Enable GPS").setCancelable(false).setPositiveButton("Yes"
