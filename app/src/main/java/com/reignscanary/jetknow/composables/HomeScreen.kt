@@ -155,5 +155,5 @@ fun SearchText(modifier: Modifier = Modifier,searchText : String,onSearchTextCha
                 modifier
             .fillMaxHeight(0.1f)
             .fillMaxWidth()
-            .padding(4.dp),
+            .padding(4.dp))
 }
