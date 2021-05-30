@@ -1,7 +1,6 @@
 package com.reignscanary.jetknow.composables
 
-import android.location.Location
-import android.location.LocationManager
+
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,7 +10,7 @@ class MainScreenViewModel : ViewModel() {
 
 private val _searchText = MutableLiveData("")
     val searchText : LiveData<String> = _searchText
-    private val _latLng = MutableLiveData(LatLng(0.0,0.0))
+    private val _latLng = MutableLiveData(LatLng(-33.88,151.21))
     val latLng : LiveData<LatLng> = _latLng
 
     fun onLatLngUpdate(newLatLng: LatLng){
