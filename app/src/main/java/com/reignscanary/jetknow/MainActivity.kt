@@ -12,14 +12,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.core.app.ActivityCompat
 import com.reignscanary.jetknow.composables.HostOfComposables
-
-
 import android.content.Intent
-import android.location.Location
 import android.provider.Settings
-import com.google.android.gms.maps.model.LatLng
-import kotlinx.coroutines.delay
-import kotlin.math.ln
+import com.reignscanary.jetknow.composables.HomeScreen
 
 
 class MainActivity : ComponentActivity() {
@@ -57,13 +52,11 @@ class MainActivity : ComponentActivity() {
                 if (locationGPS != null) {
 
                     setContent {
-
-                        HostOfComposables(
-                            savedInstanceState = savedInstanceState,
-                            location = locationGPS
-
-                        )
-                    }
+HomeScreen(contentToShow = {
+    HostOfComposables(
+        savedInstanceState = savedInstanceState,
+        location = locationGPS)
+}) }
 
 
                 } else {
