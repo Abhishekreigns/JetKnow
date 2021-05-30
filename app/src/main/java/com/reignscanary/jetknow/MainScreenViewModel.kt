@@ -1,4 +1,4 @@
-package com.reignscanary.jetknow.composables
+package com.reignscanary.jetknow
 
 
 import androidx.lifecycle.LiveData

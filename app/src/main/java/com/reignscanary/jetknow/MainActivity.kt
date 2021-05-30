@@ -14,7 +14,7 @@ import androidx.core.app.ActivityCompat
 import com.reignscanary.jetknow.composables.HostOfComposables
 import android.content.Intent
 import android.provider.Settings
-
+import com.reignscanary.jetknow.composables.HomeScreen
 
 
 class MainActivity : ComponentActivity() {
@@ -52,13 +52,11 @@ class MainActivity : ComponentActivity() {
                 if (locationGPS != null) {
 
                     setContent {
-
-                        HostOfComposables(
-                            savedInstanceState = savedInstanceState,
-                            location = locationGPS
-
-                        )
-                    }
+HomeScreen(contentToShow = {
+    HostOfComposables(
+        savedInstanceState = savedInstanceState,
+        location = locationGPS)
+}) }
 
 
                 } else {
