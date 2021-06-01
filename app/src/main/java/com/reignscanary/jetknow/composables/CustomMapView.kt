@@ -61,9 +61,11 @@ fun CustomMapView(
 
             //When the location changes like when clicking the Fab,the new location is updated in the map
             it.getMapAsync{
+                it.moveCamera(CameraUpdateFactory.newLatLngZoom(DEFAULT_LOCATION, 15f))
                 it.animateCamera(CameraUpdateFactory.zoomIn())
                 it.animateCamera(CameraUpdateFactory.zoomTo(10f), 2000, null)
-                it.moveCamera(CameraUpdateFactory.newLatLngZoom(DEFAULT_LOCATION, 15f))
+                it.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+
                 it.addMarker(
                     MarkerOptions().
                     position(DEFAULT_LOCATION)

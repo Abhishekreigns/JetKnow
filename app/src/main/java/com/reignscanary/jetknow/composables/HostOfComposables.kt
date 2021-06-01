@@ -1,5 +1,6 @@
 package com.reignscanary.jetknow.composables
 
+import android.app.Activity
 import android.location.Location
 import android.os.Bundle
 import androidx.compose.foundation.layout.*
@@ -14,6 +15,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.maps.model.LatLng
+import com.reignscanary.jetknow.MainActivity
 import com.reignscanary.jetknow.MainScreenViewModel
 
 
@@ -30,22 +32,24 @@ fun HostOfComposables(mainScreenViewModel: MainScreenViewModel = viewModel(), lo
         modifier = Modifier
             .padding(8.dp)
             .fillMaxSize(1f)
-    )
+    ) {
+        SearchText(searchText = searchText,onSearchTextChange = {mainScreenViewModel.onSearchTextChange(it)})
 
-    {
-        SearchText(searchText = searchText,
-            modifier = Modifier
-                .fillMaxWidth(0.9f)
-        ) {
-            mainScreenViewModel.onSearchTextChange(it)
-        }
-        CategoriesCarousel(modifier = Modifier
-            .shadow(elevation = 20.dp, shape = roundedBox)
-            .requiredSize(150.dp)
-            .padding(10.dp)
-            .clip(roundedBox)
+
+
+        CategoriesCarousel(
+            modifier =
+            Modifier
+                .shadow(elevation = 50.dp, shape = roundedBox)
+                .requiredSize(135.dp)
+                .clip(roundedBox)
+                .padding(8.dp)
+
+
 
         )
+
+
 
         Spacer(modifier = Modifier.padding(10.dp))
 

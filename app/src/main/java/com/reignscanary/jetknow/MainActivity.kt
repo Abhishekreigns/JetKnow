@@ -1,6 +1,7 @@
 package com.reignscanary.jetknow
 
 import android.Manifest
+
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.LocationManager
@@ -14,6 +15,7 @@ import androidx.core.app.ActivityCompat
 import com.reignscanary.jetknow.composables.HostOfComposables
 import android.content.Intent
 import android.provider.Settings
+
 import com.reignscanary.jetknow.composables.HomeScreen
 
 
@@ -21,6 +23,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
 
 
         //Request location on opening the app for the first time
@@ -57,8 +61,6 @@ HomeScreen(contentToShow = {
         savedInstanceState = savedInstanceState,
         location = locationGPS)
 }) }
-
-
                 } else {
 
                     //If location data is not retrieved mostly due to network or compass error show the toast
@@ -82,8 +84,9 @@ HomeScreen(contentToShow = {
         builder.create()?.show()
     }
 
-    companion object {
 
+    companion object {
+        const val AUTOCOMPLETE_REQUEST_CODE = 200
             const val LOCATION_PERMISSION = 100
 
 
