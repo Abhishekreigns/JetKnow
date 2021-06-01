@@ -1,12 +1,15 @@
 package com.reignscanary.jetknow
 
 
+import android.widget.Toast
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.maps.model.LatLng
+import com.google.firebase.database.FirebaseDatabase
 
 
 class MainScreenViewModel : ViewModel() {
@@ -17,8 +20,13 @@ private val _searchText = MutableLiveData("")
     val latLng : LiveData<LatLng> = _latLng
     private val _selectedCategory = MutableLiveData("")
     val selectedCategory : LiveData<String> = _selectedCategory
+
+
+
     fun onSelectedCategoryChanged(newCategory : String){
         _selectedCategory.value = newCategory
+
+
         onSearchTextChange(newCategory)
 
     }

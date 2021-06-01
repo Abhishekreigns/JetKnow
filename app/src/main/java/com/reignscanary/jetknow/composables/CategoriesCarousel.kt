@@ -16,6 +16,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.firebase.database.FirebaseDatabase
 import com.reignscanary.jetknow.Category
 import com.reignscanary.jetknow.MainScreenViewModel
 
@@ -26,7 +27,7 @@ fun CategoriesCarousel(modifier: Modifier)
 {
     val mainScreenViewModel : MainScreenViewModel = viewModel()
     val selectedCategory = mainScreenViewModel.selectedCategory.value
-    val categoryList : List<Category> = listOf(Category("Electrician"), Category("Plumber"),Category("Laundry"),Category("Barber"),Category("Dairy"))
+    val categoryList : List<Category> = listOf(Category("Electrician"), Category("Plumbers"),Category("Laundry"),Category("Barber"),Category("Dairy"))
 
     val roundedBox = RoundedCornerShape(10.dp)
 

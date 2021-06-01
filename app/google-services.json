@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "844222904682",
+    "firebase_url": "https://jetknow-1276f-default-rtdb.firebaseio.com",
+    "project_id": "jetknow-1276f",
+    "storage_bucket": "jetknow-1276f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:844222904682:android:5d032d9b8db83e100e8d13",
+        "android_client_info": {
+          "package_name": "com.reignscanary.jetknow"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "844222904682-cgr5vvr8egqslf5t7h6f8k4al40mpibc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_HzWn_YAByp0uZUuQ85ZMtkuVzd4rP7w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "844222904682-cgr5vvr8egqslf5t7h6f8k4al40mpibc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
