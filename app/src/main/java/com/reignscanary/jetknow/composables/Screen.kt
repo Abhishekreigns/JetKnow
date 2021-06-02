@@ -7,7 +7,7 @@ import androidx.compose.runtime.*
 
 
 @Composable
-fun HomeScreen(contentToShow : @Composable () -> Unit)
+fun Screen(contentToShow : @Composable () -> Unit)
 
 {
              contentToShow()

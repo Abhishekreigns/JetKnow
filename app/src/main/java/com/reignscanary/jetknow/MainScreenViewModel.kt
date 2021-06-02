@@ -20,8 +20,24 @@ private val _searchText = MutableLiveData("")
     val latLng : LiveData<LatLng> = _latLng
     private val _selectedCategory = MutableLiveData("")
     val selectedCategory : LiveData<String> = _selectedCategory
+private val _dialogStatus = MutableLiveData(false)
+val dialogStatus : LiveData<Boolean> = _dialogStatus
+    private val _contributeLatLng = MutableLiveData(LatLng(0.0,0.0))
+    val contributeLatLng : LiveData<LatLng> = _contributeLatLng
 
 
+     fun onNewContributeLatLng(newContributeLatLng: LatLng)
+     {
+         _contributeLatLng.value = newContributeLatLng
+
+
+     }
+
+
+    fun onDialogStatusChanged(newDialogStatus : Boolean){
+
+                _dialogStatus.value = newDialogStatus
+    }
 
     fun onSelectedCategoryChanged(newCategory : String){
         _selectedCategory.value = newCategory

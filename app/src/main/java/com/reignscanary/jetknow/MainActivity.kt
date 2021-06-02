@@ -15,14 +15,8 @@ import androidx.core.app.ActivityCompat
 import com.reignscanary.jetknow.composables.HostOfComposables
 import android.content.Intent
 import android.provider.Settings
-
-import com.reignscanary.jetknow.composables.HomeScreen
-import com.google.firebase.database.DatabaseReference
-
 import com.google.firebase.database.FirebaseDatabase
-
-
-
+import com.reignscanary.jetknow.composables.Screen
 
 
 class MainActivity : ComponentActivity() {
@@ -64,7 +58,7 @@ class MainActivity : ComponentActivity() {
                 if (locationGPS != null) {
 
                     setContent {
-HomeScreen(contentToShow = {
+Screen(contentToShow = {
     HostOfComposables(
         savedInstanceState = savedInstanceState,
         location = locationGPS)
