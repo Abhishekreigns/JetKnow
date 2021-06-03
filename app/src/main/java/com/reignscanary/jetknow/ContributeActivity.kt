@@ -16,21 +16,21 @@ class ContributeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val latlng : LatLng? = intent.extras?.getParcelable("latlng")
+        val latlng: LatLng? = intent.extras?.getParcelable("latlng")
 
         setContent {
+            MaterialTheme() {
 
 
-
-                     Screen {
-                         if (latlng != null) {
-                             ContributeScreenContents(latlng)
-                         }
+                Screen {
+                    if (latlng != null) {
+                        ContributeScreenContents(latlng)
+                    }
 
                 }
             }
         }
     }
 
-
+}
 

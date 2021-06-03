@@ -39,6 +39,7 @@ fun JetKnowTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composabl
         colors = colors,
         typography = Typography,
         shapes = Shapes,
-        content = content
+        content = content,
+
     )
 }

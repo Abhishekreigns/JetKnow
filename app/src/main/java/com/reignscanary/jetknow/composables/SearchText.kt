@@ -21,7 +21,6 @@ fun SearchText(modifier: Modifier = Modifier, searchText : String, onSearchTextC
     val context = LocalContext.current
     Toast.makeText(context,"${myRef.child(searchText)}", Toast.LENGTH_SHORT).show()
 
-
     OutlinedTextField(
         value = searchText,
         onValueChange = onSearchTextChange,
@@ -29,6 +28,8 @@ fun SearchText(modifier: Modifier = Modifier, searchText : String, onSearchTextC
         ,modifier = modifier
             .fillMaxHeight(0.1f)
             .fillMaxWidth()
-            .padding(4.dp))
+            .padding(4.dp)
+
+    )
 
 }

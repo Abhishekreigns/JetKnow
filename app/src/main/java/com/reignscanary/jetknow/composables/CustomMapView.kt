@@ -24,6 +24,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -62,7 +63,7 @@ val openDialog  by mainViewModel.dialogStatus.observeAsState(initial = false)
         factory = { mapView.apply {
             this.onCreate(savedInstanceState)
             this.getMapAsync{
-
+                it.mapType = GoogleMap.MAP_TYPE_SATELLITE
                 //The gestures and zoom features are enabled here
                 it.uiSettings.setAllGesturesEnabled(true)
                 it.moveCamera(CameraUpdateFactory.newLatLngZoom(DEFAULT_LOCATION, 15f))
@@ -88,13 +89,12 @@ val openDialog  by mainViewModel.dialogStatus.observeAsState(initial = false)
         },
         update = {
 
-            onLatLngUpdate(DEFAULT_LOCATION)
 
             //When the location changes like when clicking the Fab,the new location is updated in the map
             it.getMapAsync{
 
                 it.apply {
-
+                    mapType = GoogleMap.MAP_TYPE_NORMAL
                 animateCamera(CameraUpdateFactory.zoomIn())
                 animateCamera(CameraUpdateFactory.zoomTo(10f), 2000, null)
                animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))

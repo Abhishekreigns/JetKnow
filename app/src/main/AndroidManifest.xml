@@ -17,7 +17,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.JetKnow">
-
+        <activity
+            android:name=".LoadingActivity"
+            android:exported="true"
+            android:label="@string/title_activity_loading"
+            android:theme="@style/Theme.JetKnow.NoActionBar" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -29,12 +33,12 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAwWCf3GnkmAzCmyUKZJTrWV2Bno-J3644" />
+
         <activity
             android:name=".ContributeActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.JetKnow.NoActionBar">
-        </activity>
+            android:theme="@style/Theme.JetKnow.NoActionBar"></activity>
         <activity
             android:name=".MainActivity"
             android:exported="true"
