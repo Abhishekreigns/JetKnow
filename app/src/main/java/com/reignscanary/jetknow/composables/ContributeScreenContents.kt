@@ -62,7 +62,6 @@ var name : String by remember {
            onValueChange ={ name = it },
            modifier = Modifier
                .fillMaxWidth(1f)
-               .background(Color.White, RoundedCornerShape(14.dp))
                .padding(top = 10.dp,end = 20.dp, start = 20.dp)
                .clip(RoundedCornerShape(12.dp))
                ,

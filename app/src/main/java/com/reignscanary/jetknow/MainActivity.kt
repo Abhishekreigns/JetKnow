@@ -14,6 +14,7 @@ import androidx.core.app.ActivityCompat
 import android.location.*
 import android.location.LocationListener
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -23,13 +24,8 @@ import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
 import com.google.firebase.database.FirebaseDatabase
 import com.reignscanary.jetknow.composables.HostOfComposables
-import com.reignscanary.jetknow.composables.LoadingScreen
 import com.reignscanary.jetknow.composables.Screen
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-
+import com.reignscanary.jetknow.myTheme.JetKnowTheme
 
 lateinit var locationManager: LocationManager
 class MainActivity : ComponentActivity() {
@@ -65,16 +61,13 @@ class MainActivity : ComponentActivity() {
             Toast.makeText(applicationContext,"Loading...", Toast.LENGTH_LONG).show()
             setContent {
 
-                MaterialTheme() {
-
-
+                JetKnowTheme{
                     Screen {
 
                         HostOfComposables(savedInstanceState = savedInstanceState, location = it)
                     }
-                }
 
-            }
+            }}
         }
         locationManager.requestLocationUpdates(
             LocationManager.GPS_PROVIDER,

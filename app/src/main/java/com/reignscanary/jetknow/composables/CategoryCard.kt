@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -33,7 +34,7 @@ fun CategoryCard(modifier: Modifier,
     val myRef = database.getReference("Categories")
     Surface(
         modifier= modifier.padding(0.1.dp),
-        color = if(isSelected) Color(0xfffea3aa) else  Color.White
+        color = if(isSelected) MaterialTheme.colors.primaryVariant else  MaterialTheme.colors.primary
 
     ) {
         Row(

@@ -19,6 +19,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.firebase.database.FirebaseDatabase
 import com.reignscanary.jetknow.Category
 import com.reignscanary.jetknow.MainScreenViewModel
+import java.util.*
 
 
 @Composable
@@ -31,14 +32,18 @@ fun CategoriesCarousel(modifier: Modifier)
 
     val roundedBox = RoundedCornerShape(10.dp)
 
-   LazyRow(Modifier
-       .padding(10.dp)
-       .clip(roundedBox)
+   LazyRow(
+       Modifier
+           .padding(10.dp)
+           .clip(roundedBox)
        ) {
 
        item{
            for(i in categoryList){
-               CategoryCard(modifier.padding(end = 4.dp).clip(RoundedCornerShape(12.dp)),category = i.category,isSelected =  selectedCategory == i.category){
+               CategoryCard(
+                   modifier
+                       .padding(end = 4.dp)
+                       .clip(RoundedCornerShape(12.dp)),category = i.category,isSelected =  selectedCategory == i.category){
                    mainScreenViewModel.onSelectedCategoryChanged(it)
                }
            }
@@ -49,3 +54,6 @@ fun CategoriesCarousel(modifier: Modifier)
 
 
 }
+
+
+

@@ -5,12 +5,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import com.google.android.gms.maps.model.LatLng
 import com.reignscanary.jetknow.composables.ContributeScreenContents
 import com.reignscanary.jetknow.composables.Screen
-import com.reignscanary.jetknow.ui.theme.JetKnowTheme
+import com.reignscanary.jetknow.myTheme.JetKnowTheme
+
+
 
 class ContributeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,18 +19,19 @@ class ContributeActivity : ComponentActivity() {
         val latlng: LatLng? = intent.extras?.getParcelable("latlng")
 
         setContent {
-            MaterialTheme() {
 
 
+
+            JetKnowTheme{
                 Screen {
                     if (latlng != null) {
                         ContributeScreenContents(latlng)
                     }
 
                 }
-            }
+            }}
         }
     }
 
-}
+
 
