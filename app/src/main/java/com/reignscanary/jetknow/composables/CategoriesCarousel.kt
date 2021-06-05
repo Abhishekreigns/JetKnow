@@ -1,10 +1,9 @@
 package com.reignscanary.jetknow.composables
 
 
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -26,30 +25,40 @@ import java.util.*
 fun CategoriesCarousel(modifier: Modifier)
 
 {
+
+
     val mainScreenViewModel : MainScreenViewModel = viewModel()
     val selectedCategory = mainScreenViewModel.selectedCategory.value
     val categoryList : List<Category> = listOf(Category("Electrician"), Category("Plumbers"),Category("Laundry"),Category("Barber"),Category("Dairy"))
 
     val roundedBox = RoundedCornerShape(10.dp)
 
-   LazyRow(
-       Modifier
-           .padding(10.dp)
-           .clip(roundedBox)
-       ) {
 
-       item{
-           for(i in categoryList){
-               CategoryCard(
-                   modifier
-                       .padding(end = 4.dp)
-                       .clip(RoundedCornerShape(12.dp)),category = i.category,isSelected =  selectedCategory == i.category){
-                   mainScreenViewModel.onSelectedCategoryChanged(it)
-               }
-           }
-       }
 
-   }
+    LazyRow(
+        Modifier
+            .padding(start = 10.dp, end = 10.dp, top = 10.dp)
+            .clip(roundedBox)
+
+    ) {
+
+        item {
+            for (i in categoryList) {
+                CategoryCard(
+                    modifier
+                        .padding(end = 4.dp)
+
+                        .clip(roundedBox),
+                    category = i.category,
+                    isSelected = selectedCategory == i.category
+
+                ) {
+                    mainScreenViewModel.onSelectedCategoryChanged(it)
+                }
+            }
+        }
+
+    }
 
 
 

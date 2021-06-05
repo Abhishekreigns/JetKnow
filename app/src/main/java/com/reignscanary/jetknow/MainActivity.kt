@@ -13,9 +13,11 @@ import androidx.activity.compose.setContent
 import androidx.core.app.ActivityCompat
 import android.location.*
 import android.location.LocationListener
+import androidx.compose.foundation.background
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.common.api.ApiException
@@ -62,13 +64,14 @@ class MainActivity : ComponentActivity() {
             setContent {
 
                 JetKnowTheme{
+                    Surface(color = MaterialTheme.colors.background) {
                     Screen {
 
                         HostOfComposables(savedInstanceState = savedInstanceState, location = it)
                     }
 
             }}
-        }
+        }}
         locationManager.requestLocationUpdates(
             LocationManager.GPS_PROVIDER,
             1000L,

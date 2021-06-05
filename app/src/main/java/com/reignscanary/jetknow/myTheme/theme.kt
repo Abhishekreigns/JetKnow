@@ -9,10 +9,10 @@ import androidx.compose.ui.graphics.Color
 
 
 private val LightColors = lightColors(
-    primary = red,
-    primaryVariant = green,
-    onPrimary = Color.White,
-    secondary = green ,
+    primary = greenLightThemePrimary,
+    onPrimary = Color.Black,
+    secondary = redLightThemeSecondary,
+    onSecondary = Color.White,
     background = Color.White,
     onBackground = Color.Black,
     surface = Color.White,
@@ -23,11 +23,11 @@ private val LightColors = lightColors(
 
 private val DarkColors = darkColors(
 
-    primary = lightRed,
-    primaryVariant = darkGreen,
+    primary = greenDarkThemePrimary,
     onPrimary = Color.Black,
-    secondary = darkGreen,
-    background = darkGray,
+    secondary = redDarkThemeSecondary,
+    onSecondary = Color.White,
+    background = Color.Black,
     onBackground = Color.White,
     surface = Color.DarkGray,
     onSurface = Color.White
@@ -43,6 +43,7 @@ private val DarkColors = darkColors(
 fun JetKnowTheme(content : @Composable () -> Unit){
 
 MaterialTheme(content = content,colors = if(isSystemInDarkTheme())  DarkColors else LightColors)
+
 
 
 }

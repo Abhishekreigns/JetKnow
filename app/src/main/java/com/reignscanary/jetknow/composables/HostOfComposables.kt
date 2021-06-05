@@ -9,6 +9,8 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import android.widget.Toast
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.FloatingActionButton
@@ -33,10 +35,10 @@ import com.reignscanary.jetknow.locationManager
 
 @SuppressLint("MissingPermission")
 @Composable
-fun HostOfComposables(mainScreenViewModel: MainScreenViewModel = viewModel(),location:Location ,savedInstanceState : Bundle?)
-{
-    val latLng  : LatLng by mainScreenViewModel.latLng.observeAsState(LatLng(-33.88,151.21))
-    val searchText :String by mainScreenViewModel.searchText.observeAsState("" )
+fun HostOfComposables(mainScreenViewModel: MainScreenViewModel = viewModel(),location:Location ,savedInstanceState : Bundle?) {
+
+    val latLng: LatLng by mainScreenViewModel.latLng.observeAsState(LatLng(-33.88, 151.21))
+    val searchText: String by mainScreenViewModel.searchText.observeAsState("")
     val roundedBox = RoundedCornerShape(12.dp)
     val context = LocalContext.current
 
@@ -46,68 +48,75 @@ fun HostOfComposables(mainScreenViewModel: MainScreenViewModel = viewModel(),loc
             .fillMaxSize(1f)
             .padding(10.dp)
     ) {
-        SearchText(searchText = searchText,onSearchTextChange = {mainScreenViewModel.onSearchTextChange(it)})
+
+
+        Box(modifier = Modifier.weight(1f)) {
+
+            Column() {
+
+
+                SearchText(
+                    searchText = searchText,
+                    onSearchTextChange = { mainScreenViewModel.onSearchTextChange(it) })
 
 
 
-        CategoriesCarousel(
-            modifier =
-            Modifier
-                .shadow(elevation = 50.dp, shape = roundedBox)
-                .requiredSize(135.dp)
-                .clip(roundedBox)
-                .padding(8.dp)
+                CategoriesCarousel(
+                    modifier =
+                    Modifier
+                        .clip(roundedBox)
+                        .requiredSize(100.dp)
+                        .padding(8.dp)
 
 
 
-        )
+                )
+            }
+        }
 
 
 
         Spacer(modifier = Modifier.padding(10.dp))
-
-        CustomMapView(
-            DEFAULT_LOCATION = latLng,
-            savedInstanceState = savedInstanceState,
-            modifier = Modifier
-                .weight(16f)
-                .padding(top = 6.dp)
-                .shadow(elevation = 8.dp, shape = roundedBox)
-                .clip(roundedBox)
-
-
-        ){
-            mainScreenViewModel.onLatLngUpdate(it)
-        }
-        Spacer(modifier = Modifier.padding(2.dp))
-
-        FloatingActionButton(onClick = {
+        Box(modifier = Modifier.weight(3f)) {
+            CustomMapView(
+                DEFAULT_LOCATION = latLng,
+                savedInstanceState = savedInstanceState,
+                modifier = Modifier
+                    .padding(top = 6.dp,start = 10.dp,end = 10.dp)
+                    .shadow(elevation = 8.dp, shape = roundedBox)
+                    .clip(roundedBox)
 
 
-            if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
-            {
-                  Toast.makeText(context,"Enable GPS",Toast.LENGTH_SHORT).show()
+            ) {
+                mainScreenViewModel.onLatLngUpdate(it)
+            }
+            Spacer(modifier = Modifier.padding(2.dp))
+
+            FloatingActionButton(onClick = {
+
+
+                if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                    Toast.makeText(context, "Enable GPS", Toast.LENGTH_SHORT).show()
+
+
+                } else {
+                    //on Fab Click update the position value to the current location of the user
+
+                    mainScreenViewModel.onLatLngUpdate(
+                        LatLng(
+                            location.latitude,
+                            location.longitude
+                        )
+                    )
+
+
+                }
 
 
             }
-            else {
-                //on Fab Click update the position value to the current location of the user
+            ) {
 
-                mainScreenViewModel.onLatLngUpdate(LatLng(location.latitude, location.longitude))
-
-
-
-
-
-}
-
-
-
-
-
-        }
-        ) {
-
+            }
         }
 
     }

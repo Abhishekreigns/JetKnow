@@ -5,6 +5,7 @@ import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.AlertDialog
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
@@ -70,8 +71,8 @@ fun AlertDialogComponent(context: Context, mainScreenViewModel: MainScreenViewMo
 
 
             },
-            backgroundColor = colorResource(id = R.color.cardview_light_background),
-            contentColor = Color.Black,
+            backgroundColor = MaterialTheme.colors.surface,
+            contentColor =MaterialTheme.colors.onSurface,
             modifier = Modifier.clip(RoundedCornerShape(10.dp))
 
 
