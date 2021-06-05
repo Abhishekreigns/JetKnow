@@ -26,7 +26,6 @@ fun AlertDialogComponent(context: Context, mainScreenViewModel: MainScreenViewMo
 
 
     val isOpen by mainScreenViewModel.dialogStatus.observeAsState(initial =true )
-  //  val wantToContribute by mainScreenViewModel.wantToContribute.observeAsState(initial = false)
     var i : Intent
 
     if(isOpen){
@@ -46,8 +45,6 @@ fun AlertDialogComponent(context: Context, mainScreenViewModel: MainScreenViewMo
                     context.startActivity(i)
                     Toast.makeText(context,"Another Screen Will Open,you can add the details there",
                         Toast.LENGTH_SHORT).show()
-
-
                 }) {
 
                     Text(text = "Ok Add")
@@ -72,11 +69,7 @@ fun AlertDialogComponent(context: Context, mainScreenViewModel: MainScreenViewMo
             },
             backgroundColor = MaterialTheme.colors.surface,
             contentColor =MaterialTheme.colors.onSurface,
-            modifier = Modifier.clip(RoundedCornerShape(10.dp))
-
-
-
-
+            modifier = Modifier.clip(MaterialTheme.shapes.large)
         )
 
 

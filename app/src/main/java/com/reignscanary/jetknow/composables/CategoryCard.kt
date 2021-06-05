@@ -34,21 +34,20 @@ fun CategoryCard(modifier: Modifier,
 )
 {
     val alpha: Float by animateFloatAsState(if (isSelected) 1f else 0.5f)
-    val roundedBox = RoundedCornerShape(10.dp)
     val context = LocalContext.current
     val database = FirebaseDatabase.getInstance()
     val myRef = database.getReference("Categories")
     Surface(
         modifier= modifier
             .padding(top = 8.dp, bottom = 8.dp,end = 1.dp)
-            .clip(roundedBox),
+            .clip(MaterialTheme.shapes.large),
         color = if(isSelected) MaterialTheme.colors.primaryVariant else  MaterialTheme.colors.primary
 
     ) {
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .clip(roundedBox)
+                .clip(MaterialTheme.shapes.medium)
 
                 .toggleable(
                 value = isSelected,

@@ -35,10 +35,8 @@ var name : String by remember {
     val context = LocalContext.current
     val mainScreenViewModel : MainScreenViewModel = viewModel()
     val searchText :String by mainScreenViewModel.searchText.observeAsState("" )
-    val roundedBox = RoundedCornerShape(10.dp)
    Column(modifier = Modifier
        .fillMaxSize()
-       .clip(roundedBox)
        .padding(top = 150.dp, end = 10.dp, start = 10.dp)) {
 
 Box(modifier =  Modifier.weight(0.8f))
@@ -61,7 +59,7 @@ Box(modifier =  Modifier.weight(0.8f))
            modifier = Modifier
                .fillMaxWidth(1f)
                .padding(end = 20.dp, start = 20.dp)
-               .clip(RoundedCornerShape(12.dp))
+               .clip(MaterialTheme.shapes.large)
                ,
            placeholder = { Text(text = "Enter Name")}
            ,singleLine = true
@@ -70,7 +68,7 @@ Box(modifier =  Modifier.weight(0.8f))
                value = "$latlng",onValueChange ={},modifier = Modifier
                    .fillMaxWidth(1f)
                    .padding(top = 16.dp, end = 20.dp, start = 20.dp)
-                   .clip(RoundedCornerShape(12.dp)),
+                   .clip(MaterialTheme.shapes.large),
                singleLine = true
            )
            Text(
@@ -81,7 +79,7 @@ Box(modifier =  Modifier.weight(0.8f))
            )
            CategoriesCarousel(modifier = Modifier
                .requiredSize(100.dp)
-               .clip(roundedBox)
+               .clip(MaterialTheme.shapes.large)
                .padding(10.dp) )
            SearchText(searchText = searchText,modifier = Modifier
                .padding(8.dp)

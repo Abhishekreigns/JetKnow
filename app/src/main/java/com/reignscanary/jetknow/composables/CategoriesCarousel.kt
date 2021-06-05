@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -30,15 +31,10 @@ fun CategoriesCarousel(modifier: Modifier)
     val mainScreenViewModel : MainScreenViewModel = viewModel()
     val selectedCategory = mainScreenViewModel.selectedCategory.value
     val categoryList : List<Category> = listOf(Category("Electrician"), Category("Plumbers"),Category("Laundry"),Category("Barber"),Category("Dairy"))
-
-    val roundedBox = RoundedCornerShape(10.dp)
-
-
-
     LazyRow(
         Modifier
             .padding(start = 10.dp, end = 10.dp, top = 10.dp)
-            .clip(roundedBox)
+            .clip(MaterialTheme.shapes.large)
 
     ) {
 
@@ -48,7 +44,7 @@ fun CategoriesCarousel(modifier: Modifier)
                     modifier
                         .padding(end = 4.dp)
 
-                        .clip(roundedBox),
+                        .clip(MaterialTheme.shapes.large),
                     category = i.category,
                     isSelected = selectedCategory == i.category
 

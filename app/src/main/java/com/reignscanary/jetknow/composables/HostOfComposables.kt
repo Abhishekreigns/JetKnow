@@ -14,6 +14,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -39,7 +40,6 @@ fun HostOfComposables(mainScreenViewModel: MainScreenViewModel = viewModel(),loc
 
     val latLng: LatLng by mainScreenViewModel.latLng.observeAsState(LatLng(-33.88, 151.21))
     val searchText: String by mainScreenViewModel.searchText.observeAsState("")
-    val roundedBox = RoundedCornerShape(12.dp)
     val context = LocalContext.current
 
     //Align all the composables in a column
@@ -64,7 +64,7 @@ fun HostOfComposables(mainScreenViewModel: MainScreenViewModel = viewModel(),loc
                 CategoriesCarousel(
                     modifier =
                     Modifier
-                        .clip(roundedBox)
+                        .clip(MaterialTheme.shapes.large)
                         .requiredSize(100.dp)
                         .padding(8.dp)
 
@@ -83,13 +83,11 @@ fun HostOfComposables(mainScreenViewModel: MainScreenViewModel = viewModel(),loc
                 savedInstanceState = savedInstanceState,
                 modifier = Modifier
                     .padding(top = 6.dp,start = 10.dp,end = 10.dp)
-                    .shadow(elevation = 8.dp, shape = roundedBox)
-                    .clip(roundedBox)
+                    .shadow(elevation = 8.dp, shape = MaterialTheme.shapes.large)
+                    .clip(MaterialTheme.shapes.large)
 
 
-            ) {
-                mainScreenViewModel.onLatLngUpdate(it)
-            }
+            )
             Spacer(modifier = Modifier.padding(2.dp))
 
             FloatingActionButton(onClick = {

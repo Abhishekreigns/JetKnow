@@ -1,27 +1,15 @@
 package com.reignscanary.jetknow.composables
 
-import android.content.Context
-import android.content.Intent
+
 import android.os.Bundle
 import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -29,17 +17,13 @@ import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.reignscanary.jetknow.ContributeActivity
-import com.reignscanary.jetknow.Contributions
 import com.reignscanary.jetknow.MainScreenViewModel
-import com.reignscanary.jetknow.R
 
 @Composable
 fun CustomMapView(
     DEFAULT_LOCATION: LatLng,
     savedInstanceState: Bundle?,
-    modifier: Modifier = Modifier,
-    onLatLngUpdate: (LatLng) -> Unit
+    modifier: Modifier = Modifier
 )
 {
 
@@ -55,7 +39,7 @@ val openDialog  by mainViewModel.dialogStatus.observeAsState(initial = false)
     val contributeLatLng by mainViewModel.contributeLatLng.observeAsState(LatLng(0.0,0.0))
     val mapView = MapView(context)
 
-  //  val wantToContribute by mainViewModel.wantToContribute.observeAsState(initial = false)
+
     //Composing mapView using AndroidView()
 
     AndroidView(
