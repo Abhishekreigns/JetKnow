@@ -52,13 +52,15 @@ class MainActivity : ComponentActivity() {
 
 
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
+
         if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
         {
             enableGps(applicationContext)
 
         }
-
-
+        else
+        {
         val locationListener = LocationListener {
             Toast.makeText(applicationContext,"Loading...", Toast.LENGTH_LONG).show()
             setContent {
@@ -68,6 +70,8 @@ class MainActivity : ComponentActivity() {
                     Screen {
 
                         HostOfComposables(savedInstanceState = savedInstanceState, location = it)
+
+
                     }
 
             }}
@@ -77,7 +81,7 @@ class MainActivity : ComponentActivity() {
             1000L,
             100f,
             locationListener
-        )
+        )}
 
         val database = FirebaseDatabase.getInstance()
         val myRef = database.getReference("Categories")
