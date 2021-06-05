@@ -48,7 +48,6 @@ fun AlertDialogComponent(context: Context, mainScreenViewModel: MainScreenViewMo
                         Toast.LENGTH_SHORT).show()
 
 
-
                 }) {
 
                     Text(text = "Ok Add")
