@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -44,18 +45,14 @@ fun HostOfComposables(mainScreenViewModel: MainScreenViewModel = viewModel(),loc
                 searchText = searchText,
                 onSearchTextChange = { mainScreenViewModel.onSearchTextChange(it) })
 
-                CustomMapView(
-                    DEFAULT_LOCATION = latLng,
-                    savedInstanceState = savedInstanceState,
-                    modifier = Modifier
-                        .padding(top = 6.dp, start = 16.dp, end = 16.dp, bottom = 10.dp)
-                        .shadow(elevation = 8.dp, shape = MaterialTheme.shapes.large)
+                CategoriesCarousel(
+                    modifier =
+                    Modifier
+                        .requiredSize(100.dp)
                         .clip(MaterialTheme.shapes.large)
+                        .padding(8.dp)
                 )
-
-
-
-        }},
+            }},
         floatingActionButton = {
             FloatingActionButton(onClick = {
                 if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -82,44 +79,50 @@ fun HostOfComposables(mainScreenViewModel: MainScreenViewModel = viewModel(),loc
 Column {
 
 
-    CategoriesCarousel(
-        modifier =
-        Modifier
-            .requiredSize(100.dp)
+    CustomMapView(
+        DEFAULT_LOCATION = latLng,
+        savedInstanceState = savedInstanceState,
+        modifier = Modifier
+            .padding(top = 6.dp, start = 16.dp, end = 16.dp, bottom = 10.dp)
+            .shadow(elevation = 8.dp, shape = MaterialTheme.shapes.large)
             .clip(MaterialTheme.shapes.large)
-            .padding(8.dp)
     )
 
 
 
 }
         //Align all the composables in a column
-
-
-
     }
 }
 @Composable
 fun CustomBottomBar() {
-BottomNavigation(modifier = Modifier.clip(MaterialTheme.shapes.medium),backgroundColor = MaterialTheme.colors.secondary,contentColor = MaterialTheme.colors.onSecondary,content =
+
+    val topRoundedCards = RoundedCornerShape(topStart = 12.dp,topEnd = 12.dp)
+BottomNavigation(modifier = Modifier.clip(topRoundedCards),backgroundColor = MaterialTheme.colors.secondary,contentColor = MaterialTheme.colors.onSecondary,content =
 
 
 {
 BottomNavigationItem(selected = false, onClick = { /*TODO*/ },icon = {
     Icon(imageVector = Icons.Filled.Place, contentDescription = "Add" )
 
+},label = {
+    Text(text = "Place")
 })
 
 
     BottomNavigationItem(selected = true, onClick = { /*TODO*/ },icon = {
-        Icon(imageVector = Icons.Filled.Edit, contentDescription = "Add" )
+        Icon(imageVector = Icons.Filled.Edit, contentDescription = "Edit" )
 
+    },label = {
+        Text(text = "Edit")
     })
 
 
     BottomNavigationItem(selected = false, onClick = { /*TODO*/ },icon = {
-        Icon(imageVector = Icons.Filled.AccountBox, contentDescription = "Add" )
+        Icon(imageVector = Icons.Filled.AccountBox, contentDescription = "Acount" )
 
+    },label = {
+        Text(text = "Account")
     })
 })
     

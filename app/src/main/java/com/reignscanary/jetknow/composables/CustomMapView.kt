@@ -3,6 +3,7 @@ package com.reignscanary.jetknow.composables
 
 import android.os.Bundle
 import android.widget.Toast
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
@@ -14,11 +15,14 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 import com.reignscanary.jetknow.MainScreenViewModel
+import com.reignscanary.jetknow.R
 
 @Composable
 fun CustomMapView(
@@ -27,7 +31,7 @@ fun CustomMapView(
     modifier: Modifier = Modifier
 )
 {
-
+ val darkTheme : Boolean = isSystemInDarkTheme()
       val mainViewModel : MainScreenViewModel= viewModel()
     val context  = LocalContext.current
     val cameraPosition = CameraPosition.Builder()
@@ -44,12 +48,25 @@ val openDialog  by mainViewModel.dialogStatus.observeAsState(initial = false)
     //Composing mapView using AndroidView()
 
     AndroidView(
-        modifier = modifier.fillMaxWidth(1f)
-            .fillMaxHeight(0.7f),
+        modifier = modifier
+            .fillMaxWidth(1f)
+            .fillMaxHeight(0.8f),
         factory = { mapView.apply {
+
             this.onCreate(savedInstanceState)
             this.getMapAsync{
-                it.mapType = GoogleMap.MAP_TYPE_SATELLITE
+                //setting a darker mapview using styling
+
+
+                if(darkTheme)
+                {  it.setMapStyle(MapStyleOptions.loadRawResourceStyle(
+                    context, R.raw.style_json))}
+                else{
+                    it.setMapStyle(MapStyleOptions.loadRawResourceStyle(
+                        context, R.raw.style_json_light))
+
+                }
+
                 //The gestures and zoom features are enabled here
                 it.uiSettings.setAllGesturesEnabled(true)
                 it.moveCamera(CameraUpdateFactory.newLatLngZoom(DEFAULT_LOCATION, 15f))
@@ -63,8 +80,12 @@ val openDialog  by mainViewModel.dialogStatus.observeAsState(initial = false)
                   mainViewModel.onNewContributeLatLng(latlng)
                    Toast.makeText(context,"$latlng",Toast.LENGTH_SHORT).show()
 
+
                }
             }
+
+
+
 
             // this helps in loading the map faster on app startup
             this.onResume()
@@ -80,7 +101,7 @@ val openDialog  by mainViewModel.dialogStatus.observeAsState(initial = false)
             it.getMapAsync{
 
                 it.apply {
-                    mapType = GoogleMap.MAP_TYPE_NORMAL
+
                 animateCamera(CameraUpdateFactory.zoomIn())
                 animateCamera(CameraUpdateFactory.zoomTo(10f), 2000, null)
                animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))

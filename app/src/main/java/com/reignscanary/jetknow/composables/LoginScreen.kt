@@ -1,6 +1,6 @@
 package com.reignscanary.jetknow.composables
 
-import androidx.compose.foundation.Image
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,30 +14,31 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.android.gms.maps.model.LatLng
+import com.reignscanary.jetknow.ContributeActivity
 import com.reignscanary.jetknow.R
 
 @Composable
-fun LoginPage() {
-
-    var loginemail = remember {
+fun LoginPage(latlng: LatLng?) {
+    var i : Intent
+    val context = LocalContext.current
+    val loginemail = remember {
         mutableStateOf("")
     }
+    val topRoundedCards = RoundedCornerShape(topStart = 16.dp,topEnd = 16.dp)
     var loginpassword = remember {
         mutableStateOf("")
     }
 
     Box(
         modifier = Modifier
-            //.padding(start = 20.dp)
-            //.background(myTheme.colors.)
             .fillMaxSize(),
         contentAlignment = Alignment.TopCenter
     ) {
@@ -58,7 +59,7 @@ fun LoginPage() {
             }
             Box(modifier = Modifier
                 .weight(3f)
-                .clip(MaterialTheme.shapes.large)
+                .clip(topRoundedCards)
                 .background(MaterialTheme.colors.surface)
                 .padding(20.dp),
                 contentAlignment = Alignment.TopCenter
@@ -104,7 +105,12 @@ fun LoginPage() {
                         }
                     )
                     Spacer(modifier = Modifier.padding(10.dp))
-                    Button(onClick = { /*TODO*/ },
+                    Button(onClick = {
+
+                        i = Intent(context, ContributeActivity::class.java)
+                        i.putExtra("latlng", latlng)
+                        context.startActivity(i)
+                    },
                         modifier = Modifier
 
                     ) {

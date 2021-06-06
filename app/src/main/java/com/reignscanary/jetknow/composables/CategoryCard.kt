@@ -36,7 +36,7 @@ fun CategoryCard(modifier: Modifier,
     Surface(
         modifier= modifier
             .padding(top = 2.dp, bottom = 2.dp,end = 2.dp)
-            .clip(MaterialTheme.shapes.large),
+            .clip(MaterialTheme.shapes.medium),
         color = if(isSelected) MaterialTheme.colors.secondary else  MaterialTheme.colors.surface
 
     ) {

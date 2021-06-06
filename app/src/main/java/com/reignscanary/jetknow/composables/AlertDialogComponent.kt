@@ -41,8 +41,9 @@ fun AlertDialogComponent(context: Context, mainScreenViewModel: MainScreenViewMo
                 TextButton(onClick = {
                     mainScreenViewModel.onDialogStatusChanged(false)
                    // i = Intent(context, ContributeActivity::class.java)
-                   // i.putExtra("latlng", latLng)
+
                     i= Intent(context,LoginActivity::class.java)
+                    i.putExtra("latlng", latLng)
                     context.startActivity(i)
 
                 }) {
@@ -67,8 +68,8 @@ fun AlertDialogComponent(context: Context, mainScreenViewModel: MainScreenViewMo
 
 
             },
-            backgroundColor = MaterialTheme.colors.surface,
-            contentColor =MaterialTheme.colors.onSurface,
+            backgroundColor = MaterialTheme.colors.background,
+            contentColor =MaterialTheme.colors.onBackground,
             modifier = Modifier.clip(MaterialTheme.shapes.large)
         )
 
