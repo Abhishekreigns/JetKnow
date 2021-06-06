@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
@@ -16,9 +17,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.reignscanary.jetknow.R
 
 @Composable
 fun LoginPage() {
@@ -39,33 +43,23 @@ fun LoginPage() {
     ) {
         Column(
             modifier = Modifier
-                //.background(Color.Transparent)
+
         ) {
             Box(
 
                 modifier = Modifier
                     .weight(1f)
-                    //.background(Color.Transparent)
                     .fillMaxSize(),
-                //.padding(vertical = 20.dp),
 
                 contentAlignment = Alignment.Center
 
             ) {
-                /*Image(
-                    painter = painterResource(id = R.drawable. ),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .requiredSize(80.dp)
-                        .fillMaxSize()
-                )*/
+
             }
             Box(modifier = Modifier
                 .weight(3f)
-                //.background(Color.White)
-                //.shadow(20.dp)
-                .clip(RoundedCornerShape(topStart = 35.dp, topEnd = 35.dp))
-                .background(Color.LightGray)
+                .clip(MaterialTheme.shapes.large)
+                .background(MaterialTheme.colors.surface)
                 .padding(20.dp),
                 contentAlignment = Alignment.TopCenter
             )
@@ -74,12 +68,13 @@ fun LoginPage() {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "LOGIN",
+                        text = "Login Here",
                         style = TextStyle(
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = FontFamily(Font(R.font.opnsansregular))
                         ),
                         fontSize = 30.sp,
-                        color = Color.Blue
+                        color = MaterialTheme.colors.onSurface
                     )
                     Spacer(modifier = Modifier.padding(10.dp))
 
@@ -88,10 +83,12 @@ fun LoginPage() {
                         onValueChange = { loginemail.value = it },
                         modifier = Modifier
                             .fillMaxWidth(1f)
-                            //.background(BlueGray100)
-                            .clip(RoundedCornerShape(topEnd = 20.dp, topStart = 20.dp))
-                            .padding(end = 20.dp, start = 20.dp),
-                        singleLine = true
+                            .padding(end = 20.dp, start = 20.dp)
+                            .clip(MaterialTheme.shapes.large),
+                        singleLine = true,
+                        placeholder = {
+                            Text(text = "Enter Mail")
+                        }
                     )
                     Spacer(modifier = Modifier.padding(5.dp))
                     TextField(
@@ -99,17 +96,21 @@ fun LoginPage() {
                         onValueChange = {},
                         modifier = Modifier
                             .fillMaxWidth(1f)
-                            //.background(BlueGray100)
-                            .clip(RoundedCornerShape(20.dp))
-                            //.clip(RoundedCornerShape(topEnd = 20.dp, topStart = 20.dp))
-                            .padding(end = 20.dp, start = 20.dp),
+                            .padding(end = 20.dp, start = 20.dp)
+                            .clip(MaterialTheme.shapes.large),
                         singleLine = true,
+                        placeholder = {
+                            Text(text = "Enter Password")
+                        }
                     )
                     Spacer(modifier = Modifier.padding(10.dp))
                     Button(onClick = { /*TODO*/ },
                         modifier = Modifier
-                            .width(10.dp)
+
                     ) {
+                        Text(text = "LOGIN",style = TextStyle( fontFamily = FontFamily(Font(
+                            R.font.opensansbold))))
+
                     }
 
                 }

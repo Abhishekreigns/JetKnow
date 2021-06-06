@@ -3,9 +3,10 @@ package com.reignscanary.jetknow.composables
 
 import android.os.Bundle
 import android.widget.Toast
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -43,7 +44,8 @@ val openDialog  by mainViewModel.dialogStatus.observeAsState(initial = false)
     //Composing mapView using AndroidView()
 
     AndroidView(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier.fillMaxWidth(1f)
+            .fillMaxHeight(0.7f),
         factory = { mapView.apply {
             this.onCreate(savedInstanceState)
             this.getMapAsync{

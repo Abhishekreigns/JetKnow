@@ -11,8 +11,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import com.google.firebase.database.FirebaseDatabase
+import com.reignscanary.jetknow.R
 
 
 @Composable
@@ -28,10 +31,12 @@ fun SearchText(modifier: Modifier = Modifier, searchText : String, onSearchTextC
         onValueChange = onSearchTextChange,
         singleLine = true
         ,modifier = modifier
-            .fillMaxHeight(0.5f)
             .fillMaxWidth()
             .padding(start = 20.dp,end = 10.dp,top = 10.dp,bottom = 10.dp),
-        textStyle = TextStyle(color = MaterialTheme.colors.onSurface)
+        textStyle = TextStyle(
+            color = MaterialTheme.colors.onSurface,
+            fontFamily = FontFamily(Font(R.font.opnsasnsemibold))
+        )
 
     )
 

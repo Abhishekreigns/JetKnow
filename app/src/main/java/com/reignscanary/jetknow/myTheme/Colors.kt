@@ -1,22 +1,32 @@
 package com.reignscanary.jetknow.myTheme
 
 import androidx.compose.ui.graphics.Color
-
-val red = Color(0xffad124a)
-val green  = Color(0xFF25614B)
-val white = Color(0xffffffff)
-val error = Color(0xffd00036)
-
-val lightRed = Color(0xfff297a2)
-val darkGreen = Color(0xFF25614B)
-val darkGray = Color(0xfffffff)
-val Red200 = Color(0xfff297a2)
-val Red300 = Color(0xffea6d7e)
+val lightThemeBackGround = Color(0xC8D5DFFF)
+val darkThemeBackGround = Color(0xFF30303A)
 
 
+val lightThemeOnBackGround =  Color(0xFF143FCA)
+val darkThemeOnBackGround = Color(0xFF5F86FF)
 
-val  greenLightThemePrimary = Color(0xaa5efc82)
-val redLightThemeSecondary = Color(0xaafa5788)
 
-val greenDarkThemePrimary  = Color(0xFF126D28)
-val redDarkThemeSecondary = Color(0xff8c0032)
+val lightThemePrimary = Color(0xFF334C9C)
+val darkThemePrimary = Color(0xFF4268E2)
+
+val lightThemeOnPrimary = Color(0xFFFCFCFC)
+val darkThemeOnPrimary = Color(0xFFB2B5BE)
+
+val lightThemeSecondary = Color(0xFF34517C)
+val darkThemeSecondary = Color(0xD35A8EF5)
+
+val lightThemeOnSecondary = Color(0xFF000000)
+val darkThemeOnSecondary = Color(0xFF000000)
+
+val lightThemeSurface = Color(0xFF6C7AA8)
+val darkThemeSurface = Color(0xFF3F4044)
+
+val lightThemeOnSurface = Color(0xFF000000)
+val darkThemeOnSurface = Color(0xFF777B86)
+
+
+
+

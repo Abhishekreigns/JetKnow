@@ -18,6 +18,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.maps.model.LatLng
 import com.reignscanary.jetknow.ContributeActivity
+import com.reignscanary.jetknow.LoginActivity
 import com.reignscanary.jetknow.MainScreenViewModel
 import com.reignscanary.jetknow.R
 
@@ -38,13 +39,12 @@ fun AlertDialogComponent(context: Context, mainScreenViewModel: MainScreenViewMo
             confirmButton = {
 
                 TextButton(onClick = {
-                    // context.startActivity(Intent(context,ContributeActivity::class.java))
                     mainScreenViewModel.onDialogStatusChanged(false)
-                    i = Intent(context, ContributeActivity::class.java)
-                    i.putExtra("latlng", latLng)
+                   // i = Intent(context, ContributeActivity::class.java)
+                   // i.putExtra("latlng", latLng)
+                    i= Intent(context,LoginActivity::class.java)
                     context.startActivity(i)
-                    Toast.makeText(context,"Another Screen Will Open,you can add the details there",
-                        Toast.LENGTH_SHORT).show()
+
                 }) {
 
                     Text(text = "Ok Add")
