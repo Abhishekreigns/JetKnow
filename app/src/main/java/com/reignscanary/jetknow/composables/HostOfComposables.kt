@@ -77,8 +77,7 @@ fun HostOfComposables(
 
                 } else {
                     //on Fab Click update the position value to the current location of the user
-
-                        runBlocking {
+try{
                             fusedLocationProviderClient =
                                 LocationServices.getFusedLocationProviderClient(context)
                             fusedLocationProviderClient.lastLocation.addOnSuccessListener {
@@ -90,6 +89,10 @@ fun HostOfComposables(
                                 // Toast.makeText(context,"${location?.longitude},${location?.longitude}",Toast.LENGTH_SHORT).show()
                             }
                         }
+catch (e : Exception){
+
+    Toast.makeText(context,"${e.stackTrace}",Toast.LENGTH_SHORT).show()
+}
 
 
                     if(gpsLocation!=null) {
