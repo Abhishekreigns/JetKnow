@@ -32,13 +32,13 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.Task
 import com.reignscanary.jetknow.MainScreenViewModel
 import com.reignscanary.jetknow.locationManager
-import kotlinx.coroutines.runBlocking
 import java.lang.Exception
 
 var fusedLocation:Location? =null
 var   gpsLocation : Location? = null
+@SuppressLint("StaticFieldLeak")
 lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-lateinit var locationListener : LocationListener
+var i =0
 @SuppressLint("MissingPermission")
 @Composable
 fun HostOfComposables(
@@ -77,18 +77,39 @@ fun HostOfComposables(
 
                 } else {
                     //on Fab Click update the position value to the current location of the user
-try{
+                         try{
                             fusedLocationProviderClient =
                                 LocationServices.getFusedLocationProviderClient(context)
                             fusedLocationProviderClient.lastLocation.addOnSuccessListener {
                                 fusedLocation = it
                             }
+                             locationManager.requestLocationUpdates(
+        LocationManager.GPS_PROVIDER,
+        1000L,
+        100f,
+        object :LocationListener{
 
-                            locationListener = LocationListener { location: Location ->
-                                gpsLocation = location
-                                // Toast.makeText(context,"${location?.longitude},${location?.longitude}",Toast.LENGTH_SHORT).show()
-                            }
-                        }
+            override fun onLocationChanged(p0: Location?) {
+              if(p0!=null){
+                  gpsLocation = p0
+              }
+            }
+
+            override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {
+
+            }
+
+            override fun onProviderEnabled(p0: String?) {
+
+            }
+
+            override fun onProviderDisabled(p0: String?) {
+
+            }
+
+        }
+                             )
+                         }
 catch (e : Exception){
 
     Toast.makeText(context,"${e.stackTrace}",Toast.LENGTH_SHORT).show()
@@ -105,25 +126,24 @@ catch (e : Exception){
 
                         Toast.makeText(context,"Loading.....", Toast.LENGTH_LONG).show()
                     }
-                    else{
+                    else {
 
+                        if(i==0) {
+                            Toast.makeText(
+                                context,
+                                "GPS signal is low!!,using approximate location",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                         fusedLocation?.let {
                             LatLng(
                                 it.latitude,
-                                it.longitude)
+                                it.longitude
+                            )
                         }?.let { mainScreenViewModel.onLatLngUpdate(it) }
-                        Toast.makeText(context,"GPS signal is low!!,using approximate location",Toast.LENGTH_SHORT).show()
+                        i++
 
                     }
-
-                    locationManager.requestLocationUpdates(
-                        LocationManager.GPS_PROVIDER,
-                        1000L,
-                        100f,
-                        locationListener
-                    )
-
-
                 }
 
 
