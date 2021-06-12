@@ -124,7 +124,9 @@ catch (e : Exception){
                             )
                         )
 
-                        Toast.makeText(context,"Loading.....", Toast.LENGTH_LONG).show()
+                        if(i <= 1)
+                        { Toast.makeText(context,"Loading.....", Toast.LENGTH_LONG).show()}
+                        i++
                     }
                     else {
 
@@ -132,6 +134,13 @@ catch (e : Exception){
                             Toast.makeText(
                                 context,
                                 "GPS signal is low!!,using approximate location",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                        else{
+                            Toast.makeText(
+                                context,
+                                "Click Again to get an accurate location",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -145,6 +154,7 @@ catch (e : Exception){
 
                     }
                 }
+
 
 
             },backgroundColor = MaterialTheme.colors.secondary,
