@@ -32,9 +32,13 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.Task
 import com.reignscanary.jetknow.MainScreenViewModel
 import com.reignscanary.jetknow.locationManager
+import kotlinx.coroutines.runBlocking
+import java.lang.Exception
 
 var fusedLocation:Location? =null
 var   gpsLocation : Location? = null
+lateinit var fusedLocationProviderClient : FusedLocationProviderClient
+lateinit var locationListener : LocationListener
 @SuppressLint("MissingPermission")
 @Composable
 fun HostOfComposables(
@@ -70,19 +74,22 @@ fun HostOfComposables(
                     Toast.makeText(context, "Enable GPS", Toast.LENGTH_SHORT).show()
                     enableGps(context)
 
-
                 } else {
                     //on Fab Click update the position value to the current location of the user
-                    val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
-                    fusedLocationProviderClient.lastLocation.addOnSuccessListener {
-                        fusedLocation = it
-                    }
 
-                    val locationListener = LocationListener {
-                            location : Location  ->
-                        gpsLocation = location
-                    // Toast.makeText(context,"${location?.longitude},${location?.longitude}",Toast.LENGTH_SHORT).show()
+                        runBlocking {
+                           fusedLocationProviderClient =
+                                LocationServices.getFusedLocationProviderClient(context)
+                            fusedLocationProviderClient.lastLocation.addOnSuccessListener {
+                                fusedLocation = it
+                            }
+
+                            locationListener = LocationListener { location: Location ->
+                                gpsLocation = location
+                                // Toast.makeText(context,"${location?.longitude},${location?.longitude}",Toast.LENGTH_SHORT).show()
+                            }
                         }
+
 
                     if(gpsLocation!=null) {
                         mainScreenViewModel.onLatLngUpdate(
