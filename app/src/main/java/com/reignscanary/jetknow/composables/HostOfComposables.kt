@@ -37,7 +37,7 @@ import java.lang.Exception
 
 var fusedLocation:Location? =null
 var   gpsLocation : Location? = null
-lateinit var fusedLocationProviderClient : FusedLocationProviderClient
+lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 lateinit var locationListener : LocationListener
 @SuppressLint("MissingPermission")
 @Composable
@@ -71,14 +71,15 @@ fun HostOfComposables(
         floatingActionButton = {
             FloatingActionButton(onClick = {
                 if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                    Toast.makeText(context, "Enable GPS", Toast.LENGTH_SHORT).show()
                     enableGps(context)
+                    Toast.makeText(context, "Enable GPS", Toast.LENGTH_SHORT).show()
+
 
                 } else {
                     //on Fab Click update the position value to the current location of the user
 
                         runBlocking {
-                           fusedLocationProviderClient =
+                            fusedLocationProviderClient =
                                 LocationServices.getFusedLocationProviderClient(context)
                             fusedLocationProviderClient.lastLocation.addOnSuccessListener {
                                 fusedLocation = it
@@ -109,7 +110,7 @@ fun HostOfComposables(
                                 it.longitude)
                         }?.let { mainScreenViewModel.onLatLngUpdate(it) }
                         Toast.makeText(context,"GPS signal is low!!,using approximate location",Toast.LENGTH_SHORT).show()
-                        Toast.makeText(context,"Loading.....", Toast.LENGTH_LONG).show()
+
                     }
 
                     locationManager.requestLocationUpdates(
@@ -197,7 +198,9 @@ fun enableGps(context: Context) {
     val result: Task<LocationSettingsResponse> = LocationServices.getSettingsClient(context).checkLocationSettings(builder.build())
 
     result.addOnCompleteListener {
+        task->
         try {
+            val response = task.getResult(ApiException::class.java)
 
 
         }
