@@ -30,9 +30,7 @@ fun CategoryCard(modifier: Modifier,
 )
 {
 
-    val context = LocalContext.current
-    val database = FirebaseDatabase.getInstance()
-    val myRef = database.getReference("Categories")
+
     Surface(
         modifier= modifier
             .padding(top = 2.dp, bottom = 2.dp,end = 2.dp)
@@ -48,7 +46,7 @@ fun CategoryCard(modifier: Modifier,
                 .toggleable(
                 value = isSelected,
                 onValueChange = {
-                      Toast.makeText(context,"${myRef.child(category)}",Toast.LENGTH_SHORT).show()
+
                     onSelectedCategoryChanged(category) }
             )
 

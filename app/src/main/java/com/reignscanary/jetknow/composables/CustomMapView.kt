@@ -17,13 +17,10 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.MapView
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MapStyleOptions
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 import com.reignscanary.jetknow.MainScreenViewModel
 import com.reignscanary.jetknow.R
-
+lateinit var marker :Marker
 @Composable
 fun CustomMapView(
     DEFAULT_LOCATION: LatLng,
@@ -56,7 +53,12 @@ val openDialog  by mainViewModel.dialogStatus.observeAsState(initial = false)
             this.onCreate(savedInstanceState)
             this.getMapAsync{
                 //setting a darker mapview using styling
-
+                  marker =
+           it.addMarker(
+               MarkerOptions().
+               position(DEFAULT_LOCATION)
+                   .title("Location Of you")
+           )
 
                 if(darkTheme)
                 {  it.setMapStyle(MapStyleOptions.loadRawResourceStyle(
@@ -78,7 +80,7 @@ val openDialog  by mainViewModel.dialogStatus.observeAsState(initial = false)
                    latlng ->
                  mainViewModel.onDialogStatusChanged(true)
                   mainViewModel.onNewContributeLatLng(latlng)
-                   Toast.makeText(context,"$latlng",Toast.LENGTH_SHORT).show()
+                 //  Toast.makeText(context,"$latlng",Toast.LENGTH_SHORT).show()
 
 
                }
@@ -97,20 +99,30 @@ val openDialog  by mainViewModel.dialogStatus.observeAsState(initial = false)
         update = {
 
 
+
+
             //When the location changes like when clicking the Fab,the new location is updated in the map
             it.getMapAsync{
 
                 it.apply {
-
+                 if(marker!=null){
+                     marker.remove()
+                 }
                 animateCamera(CameraUpdateFactory.zoomIn())
                 animateCamera(CameraUpdateFactory.zoomTo(10f), 2000, null)
                animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+ marker = addMarker(
 
-               addMarker(
-                    MarkerOptions().
-                    position(DEFAULT_LOCATION)
-                        .title("Location Of you")
-                )
+     MarkerOptions().
+     position(DEFAULT_LOCATION)
+         .title("Location Of you")
+ )
+
+
+
+
+
+
             }}
 
         }

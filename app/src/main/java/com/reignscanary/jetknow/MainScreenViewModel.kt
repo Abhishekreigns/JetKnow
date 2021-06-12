@@ -24,8 +24,6 @@ private val _dialogStatus = MutableLiveData(false)
 val dialogStatus : LiveData<Boolean> = _dialogStatus
     private val _contributeLatLng = MutableLiveData(LatLng(0.0,0.0))
     val contributeLatLng : LiveData<LatLng> = _contributeLatLng
-
-
      fun onNewContributeLatLng(newContributeLatLng: LatLng)
      {
          _contributeLatLng.value = newContributeLatLng
