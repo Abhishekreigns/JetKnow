@@ -24,11 +24,12 @@ import com.reignscanary.jetknow.Contributions
 import com.reignscanary.jetknow.R
 import android.R.attr.data
 import android.content.Context
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.android.gms.maps.model.LatLng
 
 import com.google.firebase.database.DataSnapshot
-
-
-
+import com.reignscanary.jetknow.MainScreenViewModel
+import com.reignscanary.jetknow.search
 
 
 @Composable
@@ -56,7 +57,7 @@ fun CategoryCard(modifier: Modifier,
                 .toggleable(
                     value = isSelected,
                     onValueChange = {
-
+                       val list=  search(category, context)
                         onSelectedCategoryChanged(category)
                     }
                 )

@@ -2,7 +2,6 @@ package com.reignscanary.jetknow.composables
 
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,13 +13,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.*
 import com.reignscanary.jetknow.MainScreenViewModel
 import com.reignscanary.jetknow.R
+import com.reignscanary.jetknow.listOfLatLng
+import java.util.HashMap
+
 lateinit var marker :Marker
+lateinit var   serviceLocator : Marker
 @Composable
 fun CustomMapView(
     DEFAULT_LOCATION: LatLng,
@@ -37,9 +38,10 @@ fun CustomMapView(
         .bearing(90f)         // Sets the orientation of the camera to east
         .tilt(30f)            // Sets the tilt of the camera to 30 degrees
         .build()              // Creates a CameraPosition from the builder
-val openDialog  by mainViewModel.dialogStatus.observeAsState(initial = false)
+    val openDialog  by mainViewModel.dialogStatus.observeAsState(initial = false)
     val contributeLatLng by mainViewModel.contributeLatLng.observeAsState(LatLng(0.0,0.0))
     val mapView = MapView(context)
+
 
 
     //Composing mapView using AndroidView()
@@ -60,7 +62,11 @@ val openDialog  by mainViewModel.dialogStatus.observeAsState(initial = false)
                position(DEFAULT_LOCATION)
                    .title("Location Of you")
            )
+                serviceLocator = it.addMarker(
 
+                    MarkerOptions().position(LatLng(0.0,0.0)).title("My Office ;)").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+
+                )
                 if(darkTheme)
                 {  it.setMapStyle(MapStyleOptions.loadRawResourceStyle(
                     context, R.raw.style_json))}
@@ -80,8 +86,7 @@ val openDialog  by mainViewModel.dialogStatus.observeAsState(initial = false)
                it.setOnMapLongClickListener {
                    latlng ->
                  mainViewModel.onDialogStatusChanged(true)
-                  mainViewModel.onNewContributeLatLng(latlng)
-                 //  Toast.makeText(context,"$latlng",Toast.LENGTH_SHORT).show()
+                  mainViewModel.onNewContributeLatLng(latlng) //  Toast.makeText(context,"$latlng",Toast.LENGTH_SHORT).show()
 
 
                }
@@ -95,11 +100,9 @@ val openDialog  by mainViewModel.dialogStatus.observeAsState(initial = false)
         update = {
             //When the location changes like when clicking the Fab,the new location is updated in the map
             it.getMapAsync{
-
+                it.clear()
                 it.apply {
-                 if(marker!=null){
-                     marker.remove()
-                 }
+                 marker.remove()
                 animateCamera(CameraUpdateFactory.zoomIn())
                 animateCamera(CameraUpdateFactory.zoomTo(10f), 2000, null)
                animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
@@ -110,7 +113,25 @@ val openDialog  by mainViewModel.dialogStatus.observeAsState(initial = false)
          .title("Location Of you")
  )
                 }
+
+                for(serviceLocation in listOfLatLng){
+                    serviceLocator =
+                        it.addMarker(
+                            MarkerOptions()
+                                .position(serviceLocation.key)
+                                .title(serviceLocation.value)
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
+                        )
+
+
+                }
+
             }
+
+
+
+
+
 
         }
     )

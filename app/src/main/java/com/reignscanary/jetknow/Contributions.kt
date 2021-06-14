@@ -1,10 +1,10 @@
 package com.reignscanary.jetknow
 
-import com.google.android.gms.maps.model.LatLng
 
 data class Contributions(
-       val id :String,
-    val lat : Double,
-       val lng:Double,
-       val name : String = "Enter Name"
+    val id: String? = null,
+    val lat: Double = 0.0,
+    val lng: Double = 0.0,
+    val name: String = "",
+    val searchText: String =""
 )

@@ -119,7 +119,7 @@ fun updateDetails(context: Context, searchText: String, name: String, contribute
     val user = FirebaseAuth.getInstance()
     val  dataRef : DatabaseReference = databaseInstance.reference
     val id = dataRef.push().key.toString()
-   val contribution = Contributions(id,contributeLatLng.latitude,contributeLatLng.longitude,name)
+   val contribution = Contributions(id,contributeLatLng.latitude,contributeLatLng.longitude,name,searchText)
 
 
     dataRef.child("Categories").child(searchText).child(id).setValue(contribution).addOnCompleteListener{

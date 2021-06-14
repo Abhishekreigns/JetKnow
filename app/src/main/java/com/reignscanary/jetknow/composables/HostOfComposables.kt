@@ -124,13 +124,13 @@ catch (e : Exception){
                             )
                         )
 
-                        if(i <= 1)
+                        if(i <= 2)
                         { Toast.makeText(context,"Loading.....", Toast.LENGTH_LONG).show()}
                         i++
                     }
                     else {
 
-                        if(i==0) {
+                        if(i==1) {
                             Toast.makeText(
                                 context,
                                 "GPS signal is low!!,using approximate location",
@@ -179,6 +179,7 @@ Column {
             .shadow(elevation = 8.dp, shape = MaterialTheme.shapes.large)
             .clip(MaterialTheme.shapes.large)
     )
+
 
 
 
