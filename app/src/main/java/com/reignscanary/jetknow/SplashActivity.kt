@@ -6,15 +6,29 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.core.app.ActivityCompat
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthCredential
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import com.reignscanary.jetknow.composables.SplashScreen
 import com.reignscanary.jetknow.ui.theme.JetKnowTheme
-private var TIME_OUT:Long = 2000
+private var TIME_OUT:Long = 1000
+
+
+
 class SplashActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         loadSplashScreen()
@@ -63,19 +77,23 @@ class SplashActivity : ComponentActivity() {
     }
 
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        val intent = Intent(this, SplashActivity::class.java)
-        startActivityForResult(intent, LOCATION_PERMISSION)
-    }
+
+
+
+
+
+
+
+
+
+
+
+
+
     companion object {
 
         const val LOCATION_PERMISSION = 100
-
+        val RC_SIGN_IN = 1
 
     }
 }

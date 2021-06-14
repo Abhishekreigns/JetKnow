@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -14,12 +15,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 
-
+@Preview(showBackground = true)
 @Composable
-fun infoPopup(){
+fun InfoPopup(){
 
     var name = remember { mutableStateOf("contributor1") }
     var address = remember { mutableStateOf("no:2," +
@@ -34,30 +36,18 @@ fun infoPopup(){
             modifier = Modifier
                 .width(300.dp)
                 .clip(RoundedCornerShape(20.dp))
-                .background(Color.LightGray)
+                .background(MaterialTheme.colors.surface)
                 .padding(20.dp)
 
         ) {
             Column {
 
-
-                /*
-                Image(
-
-                    painter = painterResource(R.drawable.ic),
-                    contentDescription = "image",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(100.dp)
-                )
-                */
-
                 Text(text = "name :", fontWeight = FontWeight.Bold)
-                Text(text = "${name.value}", color = Color.White)
+                Text(text = name.value, color = MaterialTheme.colors.onSurface)
                 Text(text = "address :", fontWeight = FontWeight.Bold)
-                Text(text = "${address.value}", color = Color.White)
+                Text(text = address.value, color = MaterialTheme.colors.onSurface)
                 Text(text = "mobile number :", fontWeight = FontWeight.Bold)
-                Text(text = "${mobileNumber.value}", color = Color.White)
+                Text(text = "${mobileNumber.value}", color = MaterialTheme.colors.onSurface)
 
                 Spacer(modifier = Modifier.height(30.dp))
 
@@ -71,7 +61,7 @@ fun infoPopup(){
                         onClick = { /*TODO*/ },
                         modifier = Modifier
                             .weight(1f)
-                            .clip(RoundedCornerShape(20.dp))
+                            .clip(MaterialTheme.shapes.large)
                     ) {
                         Text(text = "ok")
                     }

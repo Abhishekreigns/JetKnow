@@ -1,9 +1,9 @@
 package com.reignscanary.jetknow.composables
 
 import android.content.Context
+import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
@@ -23,18 +23,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.maps.model.LatLng
-import com.reignscanary.jetknow.MainScreenViewModel
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.reignscanary.jetknow.*
 import com.reignscanary.jetknow.R
 
 @Composable
 fun ContributeScreenContents(latlng : LatLng)
 {
+
 var name : String by remember {
     mutableStateOf("")
 }
     val context = LocalContext.current
     val mainScreenViewModel : MainScreenViewModel = viewModel()
     val searchText :String by mainScreenViewModel.searchText.observeAsState("" )
+    val contributeLatLng by mainScreenViewModel.contributeLatLng.observeAsState()
    Column(modifier = Modifier
        .fillMaxSize()
        .padding(top = 150.dp, end = 10.dp, start = 10.dp)) {
@@ -93,7 +98,7 @@ Box(modifier =  Modifier.weight(0.8f))
 
              Button(
                  onClick = {
-                     updateDetails(context)
+                    updateDetails(context,searchText,name, latlng)
 
                            },
                  modifier = Modifier.fillMaxWidth(0.30f)) {
@@ -108,6 +113,26 @@ Box(modifier =  Modifier.weight(0.8f))
 
 }
 
-fun updateDetails(context: Context) {
-    Toast.makeText(context,"Updated",Toast.LENGTH_SHORT).show()
+fun updateDetails(context: Context, searchText: String, name: String, contributeLatLng: LatLng) {
+
+    val databaseInstance = FirebaseDatabase.getInstance()
+    val user = FirebaseAuth.getInstance()
+    val  dataRef : DatabaseReference = databaseInstance.reference
+    val id = dataRef.push().key.toString()
+   val contribution = Contributions(id,contributeLatLng.latitude,contributeLatLng.longitude,name)
+
+
+    dataRef.child("Categories").child(searchText).child(id).setValue(contribution).addOnCompleteListener{
+         Toast.makeText(context,"Done!!",Toast.LENGTH_SHORT).show()
+                context.startActivity(Intent(context,MainActivity::class.java))}
+    user.uid?.let { dataRef.child("Contributors").child(it).setValue(contribution.id)
+        .addOnSuccessListener {
+
+            Toast.makeText(context,"Thanks for contributing!!",Toast.LENGTH_SHORT).show()
+        }
+
+
+    }
+
+
 }

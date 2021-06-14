@@ -1,5 +1,6 @@
 package com.reignscanary.jetknow.composables
 
+import android.R.attr
 import android.widget.Toast
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,8 +19,16 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
+import com.reignscanary.jetknow.Contributions
 import com.reignscanary.jetknow.R
+import android.R.attr.data
+import android.content.Context
+
+import com.google.firebase.database.DataSnapshot
+
+
+
 
 
 @Composable
@@ -30,10 +39,11 @@ fun CategoryCard(modifier: Modifier,
 )
 {
 
+ val context : Context= LocalContext.current
 
     Surface(
         modifier= modifier
-            .padding(top = 2.dp, bottom = 2.dp,end = 2.dp)
+            .padding(top = 2.dp, bottom = 2.dp, end = 2.dp)
             .clip(MaterialTheme.shapes.medium),
         color = if(isSelected) MaterialTheme.colors.secondary else  MaterialTheme.colors.surface
 
@@ -44,11 +54,12 @@ fun CategoryCard(modifier: Modifier,
                 .clip(MaterialTheme.shapes.medium)
 
                 .toggleable(
-                value = isSelected,
-                onValueChange = {
+                    value = isSelected,
+                    onValueChange = {
 
-                    onSelectedCategoryChanged(category) }
-            )
+                        onSelectedCategoryChanged(category)
+                    }
+                )
 
         ) {
             Text(text = category, textAlign = TextAlign.Center,modifier = Modifier

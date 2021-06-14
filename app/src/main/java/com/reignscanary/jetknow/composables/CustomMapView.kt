@@ -53,6 +53,7 @@ val openDialog  by mainViewModel.dialogStatus.observeAsState(initial = false)
             this.onCreate(savedInstanceState)
             this.getMapAsync{
                 //setting a darker mapview using styling
+
                   marker =
            it.addMarker(
                MarkerOptions().
@@ -86,21 +87,12 @@ val openDialog  by mainViewModel.dialogStatus.observeAsState(initial = false)
                }
             }
 
-
-
-
             // this helps in loading the map faster on app startup
             this.onResume()
-
-
         }
 
         },
         update = {
-
-
-
-
             //When the location changes like when clicking the Fab,the new location is updated in the map
             it.getMapAsync{
 
@@ -117,13 +109,8 @@ val openDialog  by mainViewModel.dialogStatus.observeAsState(initial = false)
      position(DEFAULT_LOCATION)
          .title("Location Of you")
  )
-
-
-
-
-
-
-            }}
+                }
+            }
 
         }
     )

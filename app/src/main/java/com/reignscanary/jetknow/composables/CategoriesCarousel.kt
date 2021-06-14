@@ -21,7 +21,7 @@ fun CategoriesCarousel(modifier: Modifier)
 
     val mainScreenViewModel : MainScreenViewModel = viewModel()
     val selectedCategory = mainScreenViewModel.selectedCategory.value
-    val categoryList : List<Category> = listOf(Category("Electrician"), Category("Plumbers"),Category("Laundry"),Category("Barber"),Category("Dairy"))
+    val categoryList : List<Category> = listOf(Category("Electrician"), Category("Plumbers"),Category("Developer"),Category("Laundry"),Category("Barber"),Category("Dairy"))
     LazyRow(
         Modifier
             .padding(start = 10.dp, end = 10.dp)
