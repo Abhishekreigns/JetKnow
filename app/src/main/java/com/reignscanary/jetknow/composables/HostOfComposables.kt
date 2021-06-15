@@ -46,7 +46,7 @@ fun HostOfComposables(
     savedInstanceState: Bundle?)
 {
 
-    val latLng: LatLng by mainScreenViewModel.latLng.observeAsState(LatLng(-33.88, 151.21))
+    val latLng: LatLng by mainScreenViewModel.latLng.observeAsState(LatLng(20.8021, 78.24813))
     val searchText: String by mainScreenViewModel.searchText.observeAsState("")
     val context = LocalContext.current
 

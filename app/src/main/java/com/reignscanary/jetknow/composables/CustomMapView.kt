@@ -36,9 +36,10 @@ fun CustomMapView(
         .target(DEFAULT_LOCATION) // Sets the center of the map to Mountain View
         .zoom(17f)            // Sets the zoom
         .bearing(90f)         // Sets the orientation of the camera to east
-        .tilt(30f)            // Sets the tilt of the camera to 30 degrees
+        .tilt(45f)            // Sets the tilt of the camera to 30 degrees
         .build()              // Creates a CameraPosition from the builder
     val openDialog  by mainViewModel.dialogStatus.observeAsState(initial = false)
+    val infoDialog  by mainViewModel.infoDialog.observeAsState(initial = false)
     val contributeLatLng by mainViewModel.contributeLatLng.observeAsState(LatLng(0.0,0.0))
     val mapView = MapView(context)
 
@@ -78,10 +79,13 @@ fun CustomMapView(
 
                 //The gestures and zoom features are enabled here
                 it.uiSettings.setAllGesturesEnabled(true)
-                it.moveCamera(CameraUpdateFactory.newLatLngZoom(DEFAULT_LOCATION, 15f))
                 it.animateCamera(CameraUpdateFactory.zoomIn())
                 it.animateCamera(CameraUpdateFactory.zoomTo(10f), 2000, null)
                  it.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+                    it.setMaxZoomPreference(17f)
+                it.setMinZoomPreference(5f)
+
+
 
                it.setOnMapLongClickListener {
                    latlng ->
@@ -90,11 +94,16 @@ fun CustomMapView(
 
 
                }
+
+
             }
 
             // this helps in loading the map faster on app startup
             this.onResume()
         }
+
+
+
 
         },
         update = {
@@ -122,9 +131,16 @@ fun CustomMapView(
                                 .title(serviceLocation.value)
                                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
                         )
+                    it.setOnMarkerClickListener{
 
+                        mainViewModel.onInfoDialogStatusChanged(true)
+                        true
+
+                    }
 
                 }
+
+
 
             }
 
@@ -135,6 +151,12 @@ fun CustomMapView(
 
         }
     )
+
+    if(infoDialog){
+
+        InfoPopup(mainViewModel)
+    }
+
     if(openDialog) {
 
         AlertDialogComponent(context = context,mainViewModel,contributeLatLng)

@@ -16,7 +16,7 @@ class MainScreenViewModel : ViewModel() {
 
 private val _searchText = MutableLiveData("")
     val searchText : LiveData<String> = _searchText
-    private val _latLng = MutableLiveData(LatLng(-33.88,151.21))
+    private val _latLng = MutableLiveData(LatLng(20.8021, 78.24813))
     val latLng : LiveData<LatLng> = _latLng
     private val _selectedCategory = MutableLiveData("")
     val selectedCategory : LiveData<String> = _selectedCategory
@@ -24,7 +24,16 @@ private val _dialogStatus = MutableLiveData(false)
 val dialogStatus : LiveData<Boolean> = _dialogStatus
     private val _contributeLatLng = MutableLiveData(LatLng(0.0,0.0))
     val contributeLatLng : LiveData<LatLng> = _contributeLatLng
+private val _infoDialog = MutableLiveData(false)
+    val infoDialog : LiveData<Boolean> = _infoDialog
 
+
+    fun onInfoDialogStatusChanged(newInfoDialogStatus : Boolean) {
+
+        _infoDialog.value = newInfoDialogStatus
+
+
+    }
      fun onNewContributeLatLng(newContributeLatLng: LatLng)
      {
          _contributeLatLng.value = newContributeLatLng
