@@ -31,6 +31,7 @@ import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.Task
 import com.reignscanary.jetknow.MainScreenViewModel
+import com.reignscanary.jetknow.listOfLatLng
 import com.reignscanary.jetknow.locationManager
 import java.lang.Exception
 
@@ -49,6 +50,8 @@ fun HostOfComposables(
     val latLng: LatLng by mainScreenViewModel.latLng.observeAsState(LatLng(20.8021, 78.24813))
     val searchText: String by mainScreenViewModel.searchText.observeAsState("")
     val context = LocalContext.current
+
+
 
     Scaffold (
         topBar = {
@@ -70,6 +73,7 @@ fun HostOfComposables(
             }},
         floatingActionButton = {
             FloatingActionButton(onClick = {
+                mainScreenViewModel.onListOfLatLngChanged(listOfLatLng)
                 if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                     enableGps(context)
                     Toast.makeText(context, "Enable GPS", Toast.LENGTH_SHORT).show()
@@ -154,6 +158,7 @@ catch (e : Exception){
 
                     }
                 }
+
 
 
 

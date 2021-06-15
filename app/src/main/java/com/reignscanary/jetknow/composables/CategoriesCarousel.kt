@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.reignscanary.jetknow.Category
 import com.reignscanary.jetknow.MainScreenViewModel
+import com.reignscanary.jetknow.listOfLatLng
 
 
 @Composable
@@ -35,10 +36,14 @@ fun CategoriesCarousel(modifier: Modifier)
                     modifier
                         .clip(MaterialTheme.shapes.large),
                     category = i.category,
-                    isSelected = selectedCategory == i.category
+                    isSelected = selectedCategory == i.category,
+                    onSelectedCategoryChanged = {
+                        mainScreenViewModel.onSelectedCategoryChanged(it)
+
+                    }
 
                 ) {
-                    mainScreenViewModel.onSelectedCategoryChanged(it)
+                   mainScreenViewModel.onListOfLatLngChanged(it)
                 }
             }
         }

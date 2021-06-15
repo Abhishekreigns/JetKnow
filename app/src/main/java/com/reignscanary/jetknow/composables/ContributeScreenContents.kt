@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
@@ -18,6 +19,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -36,6 +39,9 @@ fun ContributeScreenContents(latlng : LatLng)
 var name : String by remember {
     mutableStateOf("")
 }
+   var phoneNumber : String by remember {
+       mutableStateOf("")
+   }
     val context = LocalContext.current
     val mainScreenViewModel : MainScreenViewModel = viewModel()
     val searchText :String by mainScreenViewModel.searchText.observeAsState("" )
@@ -57,18 +63,22 @@ Box(modifier =  Modifier.weight(0.8f))
 
        Column() {
 
-
+           //Name Field
            TextField(
                value = name,
            onValueChange ={ name = it },
-           modifier = Modifier
-               .fillMaxWidth(1f)
-               .padding(end = 20.dp, start = 20.dp)
-               .clip(MaterialTheme.shapes.large)
+               modifier = Modifier
+                   .fillMaxWidth(1f)
+                   .padding(end = 20.dp, start = 20.dp)
+                   .clip(MaterialTheme.shapes.large)
                ,
-           placeholder = { Text(text = "Enter Name")}
-           ,singleLine = true
+               singleLine = true,
+               keyboardOptions = KeyboardOptions(
+                   keyboardType = KeyboardType.Text,
+                   imeAction = ImeAction.Done
+               )
            )
+           //LatLng Field
            TextField(
                value = "$latlng",onValueChange ={},modifier = Modifier
                    .fillMaxWidth(1f)
@@ -81,6 +91,16 @@ Box(modifier =  Modifier.weight(0.8f))
                style = TextStyle(color = MaterialTheme.colors.onSurface ,fontSize = 20.sp,fontFamily = FontFamily(Font(R.font.opnsasnsemibold))),
                modifier = Modifier.padding(top=10.dp,start = 20.dp,end = 20.dp),
                textAlign = TextAlign.Center
+           )
+
+           //PhoneNumber Field
+           TextField(
+               value = phoneNumber,onValueChange ={
+                   phoneNumber = it },modifier = Modifier
+                   .fillMaxWidth(1f)
+                   .padding(top = 16.dp, end = 20.dp, start = 20.dp)
+                   .clip(MaterialTheme.shapes.large),
+               singleLine = true
            )
            CategoriesCarousel(modifier = Modifier
                .requiredSize(100.dp)
@@ -98,7 +118,7 @@ Box(modifier =  Modifier.weight(0.8f))
 
              Button(
                  onClick = {
-                    updateDetails(context,searchText,name, latlng)
+                    updateDetails(context,searchText,name,phoneNumber,latlng)
 
                            },
                  modifier = Modifier.fillMaxWidth(0.30f)) {
@@ -113,16 +133,19 @@ Box(modifier =  Modifier.weight(0.8f))
 
 }
 
-fun updateDetails(context: Context, searchText: String, name: String, contributeLatLng: LatLng) {
+fun updateDetails(
+    context: Context, searchText: String, name: String,
+    number: String,
+    contributeLatLng: LatLng) {
 
     val databaseInstance = FirebaseDatabase.getInstance()
     val user = FirebaseAuth.getInstance()
     val  dataRef : DatabaseReference = databaseInstance.reference
     val id = dataRef.push().key.toString()
-   val contribution = Contributions(id,contributeLatLng.latitude,contributeLatLng.longitude,name,searchText)
+   val contribution = Contributions(id,contributeLatLng.latitude,contributeLatLng.longitude,name,number,searchText)
 
 
-    dataRef.child("Categories").child(searchText).child(id).setValue(contribution).addOnCompleteListener{
+    dataRef.child("Categories").child(searchText).child(contribution.number).setValue(contribution).addOnCompleteListener{
          Toast.makeText(context,"Done!!",Toast.LENGTH_SHORT).show()
                 context.startActivity(Intent(context,MainActivity::class.java))}
     user.uid?.let { dataRef.child("Contributors").child(it).setValue(contribution.id)

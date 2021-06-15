@@ -24,6 +24,8 @@ import com.reignscanary.jetknow.Contributions
 import com.reignscanary.jetknow.R
 import android.R.attr.data
 import android.content.Context
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.maps.model.LatLng
 
@@ -36,10 +38,11 @@ import com.reignscanary.jetknow.search
 fun CategoryCard(modifier: Modifier,
     category: String,
                  isSelected : Boolean = false,
-                 onSelectedCategoryChanged : (String) -> Unit
+                 onSelectedCategoryChanged : (String) -> Unit,
+                 onListOfLatLngChanged :(HashMap<LatLng,String>) -> Unit
 )
 {
-
+val mainScreenViewModel : MainScreenViewModel = viewModel()
  val context : Context= LocalContext.current
 
     Surface(
@@ -57,8 +60,12 @@ fun CategoryCard(modifier: Modifier,
                 .toggleable(
                     value = isSelected,
                     onValueChange = {
-                       val list=  search(category, context)
+
                         onSelectedCategoryChanged(category)
+                        onListOfLatLngChanged(search(category, context))
+                        mainScreenViewModel.onSelectedChange(true)
+
+
                     }
                 )
 

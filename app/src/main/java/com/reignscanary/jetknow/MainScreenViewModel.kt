@@ -9,6 +9,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.database.FirebaseDatabase
 
 
@@ -26,6 +28,19 @@ val dialogStatus : LiveData<Boolean> = _dialogStatus
     val contributeLatLng : LiveData<LatLng> = _contributeLatLng
 private val _infoDialog = MutableLiveData(false)
     val infoDialog : LiveData<Boolean> = _infoDialog
+private val _listOfLatlng = MutableLiveData(HashMap<LatLng,String>())
+    val listOfLatlng : LiveData<HashMap<LatLng,String>> = _listOfLatlng
+    private val _selectedCategoryChanged = MutableLiveData(false)
+    val selectedCategoryChanged : LiveData<Boolean> = _selectedCategoryChanged
+
+    fun onSelectedChange(newSelectionStatus : Boolean){
+        _selectedCategoryChanged.value = newSelectionStatus
+    }
+
+    fun onListOfLatLngChanged(newList : HashMap<LatLng,String>){
+        _listOfLatlng.value = newList
+    }
+
 
 
     fun onInfoDialogStatusChanged(newInfoDialogStatus : Boolean) {
@@ -49,8 +64,6 @@ private val _infoDialog = MutableLiveData(false)
 
     fun onSelectedCategoryChanged(newCategory : String){
         _selectedCategory.value = newCategory
-
-
         onSearchTextChange(newCategory)
 
     }

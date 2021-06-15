@@ -3,15 +3,18 @@ package com.reignscanary.jetknow
 import android.content.Context
 import android.util.ArrayMap
 import android.widget.Toast
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.database.*
 
 var listOfLatLng = HashMap<LatLng,String>()
-fun search(category: String,context : Context) :HashMap<LatLng,String> {
+fun search(category: String,context : Context)  : HashMap<LatLng,String> {
 
     val databaseInstance = FirebaseDatabase.getInstance()
     val  dataRef : DatabaseReference = databaseInstance.reference.child("Categories").child(category)
-
     val valueEventListener = object : ValueEventListener {
 
         override fun onDataChange(snapshot: DataSnapshot) {
@@ -23,7 +26,7 @@ fun search(category: String,context : Context) :HashMap<LatLng,String> {
 
                 if (contr != null) {
 
-                   listOfLatLng.put(LatLng(contr.lat,contr.lng),contr.searchText)
+                   listOfLatLng.put(LatLng(contr.lat,contr.lng),contr.number)
                 }
             }
         }
@@ -33,6 +36,7 @@ fun search(category: String,context : Context) :HashMap<LatLng,String> {
         }
     }
     dataRef.addValueEventListener(valueEventListener)
+    //updating in the viewmodel
 
-return listOfLatLng
+    return  listOfLatLng
 }
