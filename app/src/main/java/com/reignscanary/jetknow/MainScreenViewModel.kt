@@ -1,6 +1,7 @@
 package com.reignscanary.jetknow
 
 
+import android.content.Context
 import android.widget.Toast
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -8,10 +9,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 class MainScreenViewModel : ViewModel() {
@@ -30,16 +34,54 @@ private val _infoDialog = MutableLiveData(false)
     val infoDialog : LiveData<Boolean> = _infoDialog
 private val _listOfLatlng = MutableLiveData(HashMap<LatLng,String>())
     val listOfLatlng : LiveData<HashMap<LatLng,String>> = _listOfLatlng
-    private val _selectedCategoryChanged = MutableLiveData(false)
-    val selectedCategoryChanged : LiveData<Boolean> = _selectedCategoryChanged
+    private val _isLoading = MutableLiveData(false)
+val isLoading : LiveData<Boolean> = _isLoading
+    private val _listOfLatlngChanged = MutableLiveData(false)
+    val listOfLatlngChanged : LiveData<Boolean> = _listOfLatlngChanged
 
-    fun onSelectedChange(newSelectionStatus : Boolean){
-        _selectedCategoryChanged.value = newSelectionStatus
+    fun onListOfLatLngChangedStatus(newStatusOfList : Boolean){
+
+        _listOfLatlngChanged.value = newStatusOfList
+    }
+    fun search(category: String, context: Context)  {
+
+
+        val databaseInstance = FirebaseDatabase.getInstance()
+        val dataRef: DatabaseReference =
+            databaseInstance.reference.child("Categories").child(category)
+        var listOfLatLng = HashMap<LatLng,String>()
+
+        val valueEventListener = object : ValueEventListener {
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+                //to remove previously chosen services
+                listOfLatLng.clear()
+                for (keySnapshot: DataSnapshot in snapshot.children) {
+
+                    val contr: Contributions? = keySnapshot.getValue(Contributions::class.java)
+                    if (contr != null) {
+                        listOfLatLng.put(LatLng(contr.lat, contr.lng), contr.number)
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
+            }
+        }
+        dataRef.addValueEventListener(valueEventListener)
+
+        viewModelScope.launch {
+            _isLoading.value = true
+
+            delay(1000)
+            _listOfLatlng.value = listOfLatLng
+
+            _isLoading.value = false
+        }
+
     }
 
-    fun onListOfLatLngChanged(newList : HashMap<LatLng,String>){
-        _listOfLatlng.value = newList
-    }
 
 
 

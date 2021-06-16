@@ -20,8 +20,6 @@ import com.google.android.gms.maps.model.Marker
 import com.google.firebase.database.*
 import com.reignscanary.jetknow.Contributions
 import com.reignscanary.jetknow.MainScreenViewModel
-import com.reignscanary.jetknow.listOfLatLng
-
 @Composable
 fun InfoPopup(mainScreenViewModel: MainScreenViewModel,selectedCategory : String ,selectedMarker: Marker){
 

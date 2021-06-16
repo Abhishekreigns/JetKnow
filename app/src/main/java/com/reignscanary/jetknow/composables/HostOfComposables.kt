@@ -9,6 +9,7 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import android.widget.Toast
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
@@ -19,6 +20,7 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
@@ -31,7 +33,6 @@ import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.Task
 import com.reignscanary.jetknow.MainScreenViewModel
-import com.reignscanary.jetknow.listOfLatLng
 import com.reignscanary.jetknow.locationManager
 import java.lang.Exception
 
@@ -50,7 +51,7 @@ fun HostOfComposables(
     val latLng: LatLng by mainScreenViewModel.latLng.observeAsState(LatLng(20.8021, 78.24813))
     val searchText: String by mainScreenViewModel.searchText.observeAsState("Search")
     val context = LocalContext.current
-
+    val isLoading by mainScreenViewModel.isLoading.observeAsState(false)
 
 
     Scaffold (
@@ -73,7 +74,6 @@ fun HostOfComposables(
             }},
         floatingActionButton = {
             FloatingActionButton(onClick = {
-
                 if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                     enableGps(context)
                     Toast.makeText(context, "Enable GPS", Toast.LENGTH_SHORT).show()
@@ -179,7 +179,7 @@ catch (e : Exception){
     ,bottomBar = { CustomBottomBar() }
 
     ){
-Column {
+Box(contentAlignment = Alignment.Center) {
 
 
     CustomMapView(
@@ -190,7 +190,7 @@ Column {
             .shadow(elevation = 8.dp, shape = MaterialTheme.shapes.large)
             .clip(MaterialTheme.shapes.large)
     )
-
+    LoadingIndicator(isLoading =isLoading)
 
 
 

@@ -1,7 +1,5 @@
 package com.reignscanary.jetknow.composables
 
-import android.R.attr
-import android.widget.Toast
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -19,29 +17,19 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.google.firebase.database.*
-import com.reignscanary.jetknow.Contributions
 import com.reignscanary.jetknow.R
-import android.R.attr.data
 import android.content.Context
-import androidx.compose.foundation.background
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.graphics.Color
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.maps.model.LatLng
 
-import com.google.firebase.database.DataSnapshot
 import com.reignscanary.jetknow.MainScreenViewModel
-import com.reignscanary.jetknow.search
-
 
 @Composable
 fun CategoryCard(modifier: Modifier,
     category: String,
                  isSelected : Boolean = false,
-                 onSelectedCategoryChanged : (String) -> Unit,
-                 onListOfLatLngChanged :(HashMap<LatLng,String>) -> Unit
+                 onSelectedCategoryChanged : (String) -> Unit
 )
 {
 val mainScreenViewModel : MainScreenViewModel = viewModel()
@@ -66,15 +54,18 @@ val mainScreenViewModel : MainScreenViewModel = viewModel()
                     value = isSelected,
                     onValueChange = {
 
-                        if(it) {
+                        if (it) {
+                            mainScreenViewModel.search(category, context)
                             onSelectedCategoryChanged(category)
-                            onListOfLatLngChanged(search(category, context))
-                            mainScreenViewModel.onSelectedChange(it)
+                            mainScreenViewModel.onListOfLatLngChangedStatus(true)
                         }
                         //To switch off the chip when user clicks the chip again
-                        else{
-                            onSelectedCategoryChanged("Search for a service")
+                        else {
+                            onSelectedCategoryChanged("")
+
+
                         }
+
                     }
 
                 )

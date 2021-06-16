@@ -13,8 +13,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.reignscanary.jetknow.Category
 import com.reignscanary.jetknow.MainScreenViewModel
-import com.reignscanary.jetknow.listOfLatLng
-
 
 @Composable
 fun CategoriesCarousel(modifier: Modifier)
@@ -45,9 +43,7 @@ fun CategoriesCarousel(modifier: Modifier)
                         mainScreenViewModel.onSelectedCategoryChanged(it)
                     }
 
-                ) {
-                   mainScreenViewModel.onListOfLatLngChanged(it)
-                }
+                )
             }
         }
 
