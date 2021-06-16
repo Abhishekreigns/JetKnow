@@ -19,11 +19,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.reignscanary.jetknow.R
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.maps.model.LatLng
 
 import com.reignscanary.jetknow.MainScreenViewModel
+import com.reignscanary.jetknow.ui.theme.search
 
 @Composable
 fun CategoryCard(modifier: Modifier,
@@ -55,15 +57,18 @@ val mainScreenViewModel : MainScreenViewModel = viewModel()
                     onValueChange = {
 
                         if (it) {
-                            mainScreenViewModel.search(category, context)
+                            mainScreenViewModel.onListOfLatLngChanged(search(category, context))
                             onSelectedCategoryChanged(category)
-                            mainScreenViewModel.onListOfLatLngChangedStatus(true)
+                            mainScreenViewModel.onSelectedChange(it)
+                            if(mainScreenViewModel.listOfLatlng.value.isNullOrEmpty()){
+
+                                Toast.makeText(context,"Try Again,a Network Problem", Toast.LENGTH_SHORT).show()
+                            }
+
                         }
                         //To switch off the chip when user clicks the chip again
                         else {
                             onSelectedCategoryChanged("")
-
-
                         }
 
                     }

@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.reignscanary.jetknow.R
 import com.reignscanary.jetknow.MainScreenViewModel
+import com.reignscanary.jetknow.ui.theme.search
 
 
 @Composable
@@ -47,8 +48,13 @@ fun SearchText(modifier: Modifier = Modifier, searchText : String, onSearchTextC
 
             onSearch = {
                 focusManager.clearFocus()
-                mainScreenViewModel.search(searchText, context)
+                mainScreenViewModel.onListOfLatLngChanged(search(searchText, context))
+
                 mainScreenViewModel.onListOfLatLngChangedStatus(true)
+                if(mainScreenViewModel.listOfLatlng.value.isNullOrEmpty()){
+
+                    Toast.makeText(context,"Try Again,a Network Problem",Toast.LENGTH_SHORT).show()
+                }
             }
                 ),
         placeholder = {

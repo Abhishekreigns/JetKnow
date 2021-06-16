@@ -46,7 +46,7 @@ fun CustomMapView(
     val selectedCategory: String by mainViewModel.selectedCategory.observeAsState("")
     val list by mainViewModel.listOfLatlng.observeAsState(HashMap())
     val listOfLatLngChanged by mainViewModel.listOfLatlngChanged.observeAsState(false)
-
+    val selectionChanged by mainViewModel.selectedCategoryChanged.observeAsState(false)
     //Composing mapView using AndroidView()
 
     AndroidView(
@@ -105,9 +105,8 @@ fun CustomMapView(
         },
         update = {
 
-            if(listOfLatLngChanged){
-                Toast.makeText(context,"Getting the available services", Toast.LENGTH_SHORT).show()
-                mainViewModel.onListOfLatLngChangedStatus(false)
+            if(selectionChanged){
+            Toast.makeText(context,"Searching!!",Toast.LENGTH_SHORT).show()
             }
             //When the location changes like when clicking the Fab,the new location is updated in the map
 
