@@ -24,8 +24,10 @@ import com.reignscanary.jetknow.Contributions
 import com.reignscanary.jetknow.R
 import android.R.attr.data
 import android.content.Context
+import androidx.compose.foundation.background
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.maps.model.LatLng
 
@@ -49,7 +51,10 @@ val mainScreenViewModel : MainScreenViewModel = viewModel()
         modifier= modifier
             .padding(top = 2.dp, bottom = 2.dp, end = 2.dp)
             .clip(MaterialTheme.shapes.medium),
-        color = if(isSelected) MaterialTheme.colors.secondary else  MaterialTheme.colors.surface
+        color = if(isSelected)
+            MaterialTheme.colors.secondary
+        else
+            MaterialTheme.colors.surface
 
     ) {
         Row(
@@ -61,12 +66,17 @@ val mainScreenViewModel : MainScreenViewModel = viewModel()
                     value = isSelected,
                     onValueChange = {
 
-                        onSelectedCategoryChanged(category)
-                        onListOfLatLngChanged(search(category, context))
-                        mainScreenViewModel.onSelectedChange(true)
-
-
+                        if(it) {
+                            onSelectedCategoryChanged(category)
+                            onListOfLatLngChanged(search(category, context))
+                            mainScreenViewModel.onSelectedChange(it)
+                        }
+                        //To switch off the chip when user clicks the chip again
+                        else{
+                            onSelectedCategoryChanged("Search for a service")
+                        }
                     }
+
                 )
 
         ) {

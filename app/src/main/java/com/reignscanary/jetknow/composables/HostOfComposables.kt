@@ -48,7 +48,7 @@ fun HostOfComposables(
 {
 
     val latLng: LatLng by mainScreenViewModel.latLng.observeAsState(LatLng(20.8021, 78.24813))
-    val searchText: String by mainScreenViewModel.searchText.observeAsState("")
+    val searchText: String by mainScreenViewModel.searchText.observeAsState("Search")
     val context = LocalContext.current
 
 
@@ -73,7 +73,7 @@ fun HostOfComposables(
             }},
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                mainScreenViewModel.onListOfLatLngChanged(listOfLatLng)
+
                 if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                     enableGps(context)
                     Toast.makeText(context, "Enable GPS", Toast.LENGTH_SHORT).show()
@@ -129,12 +129,14 @@ catch (e : Exception){
                         )
 
                         if(i <= 2)
-                        { Toast.makeText(context,"Loading.....", Toast.LENGTH_LONG).show()}
+                        { Toast(context).cancel()
+                            Toast.makeText(context,"Loading.....", Toast.LENGTH_LONG).show()}
                         i++
                     }
                     else {
 
                         if(i==1) {
+                            Toast(context).cancel()
                             Toast.makeText(
                                 context,
                                 "GPS signal is low!!,using approximate location",
@@ -142,11 +144,14 @@ catch (e : Exception){
                             ).show()
                         }
                         else{
+                            Toast(context).cancel()
                             Toast.makeText(
                                 context,
                                 "Click Again to get an accurate location",
                                 Toast.LENGTH_SHORT
                             ).show()
+
+
                         }
                         fusedLocation?.let {
                             LatLng(
@@ -157,6 +162,7 @@ catch (e : Exception){
                         i++
 
                     }
+
                 }
 
 

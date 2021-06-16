@@ -106,6 +106,7 @@ fun CustomMapView(
         update = {
 
            if(selectionChanged){
+               Toast(context).cancel()
                Toast.makeText(context,"Searching!!",Toast.LENGTH_SHORT).show()
                mainViewModel.onSelectedChange(false)
            }
@@ -173,7 +174,9 @@ if(selectedMarker.title != "Location Of you"){
         InfoPopup(mainViewModel, selectedCategory,selectedMarker)
     }
         else{
+
             Toast.makeText(context,"You are Here",Toast.LENGTH_SHORT ).show()
+
         }
 
     }

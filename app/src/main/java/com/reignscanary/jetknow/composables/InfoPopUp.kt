@@ -4,6 +4,7 @@ import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.*
@@ -23,6 +24,7 @@ import com.reignscanary.jetknow.listOfLatLng
 
 @Composable
 fun InfoPopup(mainScreenViewModel: MainScreenViewModel,selectedCategory : String ,selectedMarker: Marker){
+
 
 
     val address = remember { mutableStateOf("no:2," +

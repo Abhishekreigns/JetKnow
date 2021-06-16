@@ -3,7 +3,11 @@ package com.reignscanary.jetknow.composables
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -15,7 +19,9 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -35,7 +41,7 @@ import com.reignscanary.jetknow.R
 @Composable
 fun ContributeScreenContents(latlng : LatLng)
 {
-
+    val focusManager = LocalFocusManager.current
 var name : String by remember {
     mutableStateOf("")
 }
@@ -45,12 +51,11 @@ var name : String by remember {
     val context = LocalContext.current
     val mainScreenViewModel : MainScreenViewModel = viewModel()
     val searchText :String by mainScreenViewModel.searchText.observeAsState("" )
-    val contributeLatLng by mainScreenViewModel.contributeLatLng.observeAsState()
    Column(modifier = Modifier
        .fillMaxSize()
        .padding(top = 150.dp, end = 10.dp, start = 10.dp)) {
 
-Box(modifier =  Modifier.weight(0.8f))
+Box(modifier =  Modifier.weight(0.4f))
 {
     Text(
         text = "Add Details here",
@@ -58,7 +63,7 @@ Box(modifier =  Modifier.weight(0.8f))
         modifier = Modifier.padding(start = 20.dp, end = 10.dp),
     )
 }
-       Box(modifier =  Modifier.weight(3.2f))
+       Box(modifier =  Modifier.weight(3.6f))
        {
 
        Column() {
@@ -71,11 +76,18 @@ Box(modifier =  Modifier.weight(0.8f))
                    .fillMaxWidth(1f)
                    .padding(end = 20.dp, start = 20.dp)
                    .clip(MaterialTheme.shapes.large)
+
+               ,placeholder = {
+                              Text(text = "Enter Name")
+               }
                ,
+
                singleLine = true,
-               keyboardOptions = KeyboardOptions(
-                   keyboardType = KeyboardType.Text,
-                   imeAction = ImeAction.Done
+               keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+               keyboardActions = KeyboardActions (
+                   onDone = {
+                       focusManager.clearFocus()
+                   }
                )
            )
            //LatLng Field
@@ -86,21 +98,31 @@ Box(modifier =  Modifier.weight(0.8f))
                    .clip(MaterialTheme.shapes.large),
                singleLine = true
            )
-           Text(
-               text ="Category",
-               style = TextStyle(color = MaterialTheme.colors.onSurface ,fontSize = 20.sp,fontFamily = FontFamily(Font(R.font.opnsasnsemibold))),
-               modifier = Modifier.padding(top=10.dp,start = 20.dp,end = 20.dp),
-               textAlign = TextAlign.Center
-           )
-
            //PhoneNumber Field
            TextField(
                value = phoneNumber,onValueChange ={
                    phoneNumber = it },modifier = Modifier
                    .fillMaxWidth(1f)
                    .padding(top = 16.dp, end = 20.dp, start = 20.dp)
-                   .clip(MaterialTheme.shapes.large),
-               singleLine = true
+                   .clip(MaterialTheme.shapes.large)
+                   ,
+               singleLine = true,
+               placeholder = {
+                   Text(text = "Enter Phone ")
+               },
+               keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+               keyboardActions = KeyboardActions (
+                   onDone = {
+                       //to hide the keyboard after user finishes entering the number
+                       focusManager.clearFocus()
+                   }
+               )
+           )
+           Text(
+               text ="Category",
+               style = TextStyle(color = MaterialTheme.colors.onSurface ,fontSize = 20.sp,fontFamily = FontFamily(Font(R.font.opnsasnsemibold))),
+               modifier = Modifier.padding(top=10.dp,start = 20.dp,end = 20.dp),
+               textAlign = TextAlign.Center
            )
            CategoriesCarousel(modifier = Modifier
                .requiredSize(100.dp)
@@ -113,7 +135,8 @@ Box(modifier =  Modifier.weight(0.8f))
        }
          Box(contentAlignment = Alignment.BottomEnd,modifier = Modifier
              .fillMaxSize(1f)
-             .padding(10.dp)) {
+             .padding(10.dp)
+             .weight(0.6f)) {
 
 
              Button(

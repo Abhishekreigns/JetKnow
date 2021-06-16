@@ -26,7 +26,7 @@ fun search(category: String,context : Context)  : HashMap<LatLng,String> {
 
                 if (contr != null) {
 
-                   listOfLatLng.put(LatLng(contr.lat,contr.lng),contr.number)
+                   listOfLatLng.put(LatLng(contr.lat,contr.lng), contr.number.toString())
                 }
             }
         }
