@@ -22,10 +22,8 @@ import android.content.Context
 import android.widget.Toast
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.android.gms.maps.model.LatLng
-
 import com.reignscanary.jetknow.MainScreenViewModel
-import com.reignscanary.jetknow.ui.theme.search
+import kotlinx.coroutines.launch
 
 @Composable
 fun CategoryCard(modifier: Modifier,
@@ -36,7 +34,7 @@ fun CategoryCard(modifier: Modifier,
 {
 val mainScreenViewModel : MainScreenViewModel = viewModel()
  val context : Context= LocalContext.current
-
+val coroutineScope = rememberCoroutineScope()
     Surface(
         modifier= modifier
             .padding(top = 2.dp, bottom = 2.dp, end = 2.dp)
@@ -57,18 +55,16 @@ val mainScreenViewModel : MainScreenViewModel = viewModel()
                     onValueChange = {
 
                         if (it) {
-                            mainScreenViewModel.onListOfLatLngChanged(search(category, context))
-                            onSelectedCategoryChanged(category)
-                            mainScreenViewModel.onSelectedChange(it)
-                            if(mainScreenViewModel.listOfLatlng.value.isNullOrEmpty()){
-
-                                Toast.makeText(context,"Try Again,a Network Problem", Toast.LENGTH_SHORT).show()
+                            coroutineScope.launch {
+                                mainScreenViewModel.Search(category, context)
+                                onSelectedCategoryChanged(category)
+                                mainScreenViewModel.onListOfLatLngChangedStatus(true)
                             }
-
                         }
                         //To switch off the chip when user clicks the chip again
                         else {
                             onSelectedCategoryChanged("")
+                            mainScreenViewModel.onListOfLatLngChangedStatus(true)
                         }
 
                     }

@@ -18,6 +18,7 @@ import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.*
 import com.reignscanary.jetknow.MainScreenViewModel
 import com.reignscanary.jetknow.R
+import com.reignscanary.jetknow.zoomToCurrentLocation
 
 lateinit var marker :Marker
 lateinit var   serviceLocator : Marker
@@ -27,7 +28,8 @@ lateinit var selectedMarker : Marker
 fun CustomMapView(
     DEFAULT_LOCATION: LatLng,
     savedInstanceState: Bundle?,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    mapView: MapView
 ) {
 
     val darkTheme: Boolean = isSystemInDarkTheme()
@@ -39,14 +41,9 @@ fun CustomMapView(
         .bearing(90f)         // Sets the orientation of the camera to east
         .tilt(45f)            // Sets the tilt of the camera to 30 degrees
         .build()              // Creates a CameraPosition from the builder
-    val openDialog by mainViewModel.dialogStatus.observeAsState(initial = false)
-    val infoDialog by mainViewModel.infoDialog.observeAsState(initial = false)
-    val contributeLatLng by mainViewModel.contributeLatLng.observeAsState(LatLng(0.0, 0.0))
-    val mapView = MapView(context)
-    val selectedCategory: String by mainViewModel.selectedCategory.observeAsState("")
+
     val list by mainViewModel.listOfLatlng.observeAsState(HashMap())
     val listOfLatLngChanged by mainViewModel.listOfLatlngChanged.observeAsState(false)
-    val selectionChanged by mainViewModel.selectedCategoryChanged.observeAsState(false)
     //Composing mapView using AndroidView()
 
     AndroidView(
@@ -94,6 +91,15 @@ fun CustomMapView(
                     it.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
                     it.setMaxZoomPreference(17f)
                     it.setMinZoomPreference(5f)
+
+
+                    //To contribute
+                    it.setOnMapLongClickListener { latlng ->
+                        mainViewModel.onDialogStatusChanged(true)
+                        mainViewModel.onNewContributeLatLng(latlng) //  Toast.makeText(context,"$latlng",Toast.LENGTH_SHORT).show()
+
+
+                    }
                 }
 
                 // this helps in loading the map faster on app startup
@@ -105,58 +111,52 @@ fun CustomMapView(
         },
         update = {
 
-            if(selectionChanged){
-            Toast.makeText(context,"Searching!!",Toast.LENGTH_SHORT).show()
-            }
-            //When the location changes like when clicking the Fab,the new location is updated in the map
+        //When the location changes like when clicking the Fab,the new location is updated in the map
 
             it.getMapAsync {
                 it.clear()
+
                 it.apply {
                     marker.remove()
-                    animateCamera(CameraUpdateFactory.zoomIn())
-                    animateCamera(CameraUpdateFactory.zoomTo(10f), 2000, null)
-                    animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
                     marker = addMarker(
 
                         MarkerOptions().position(DEFAULT_LOCATION)
                             .title("Location Of you")
                     )
-                }
-
-                for (serviceLocation in list) {
-                    serviceLocator =
-                        it.addMarker(
-                            MarkerOptions()
-                                .position(serviceLocation.key)
-                                .title(serviceLocation.value)
-                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
-                                .snippet(serviceLocation.value)
-
-                        )
-
-                    //To Show infoDialog for the selected marker of location
-                    it.setOnMarkerClickListener {
-
-                        // To prevent crash on user clicking his own location marker
-                        if (it.title != "Location Of you") {
-                            mainViewModel.onInfoDialogStatusChanged(true)
-                            selectedMarker = it
-
-
-                        }
-                        true
-                    }
 
                 }
 
-                //To contribute
-                it.setOnMapLongClickListener { latlng ->
-                    mainViewModel.onDialogStatusChanged(true)
-                    mainViewModel.onNewContributeLatLng(latlng) //  Toast.makeText(context,"$latlng",Toast.LENGTH_SHORT).show()
+
+if(listOfLatLngChanged) {
+
+    for (serviceLocation in list) {
+        serviceLocator =
+            it.addMarker(
+                MarkerOptions()
+                    .position(serviceLocation.key)
+                    .title(serviceLocation.value)
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
+                    .snippet(serviceLocation.value)
+
+            )
+
+        //To Show infoDialog for the selected marker of location
+        it.setOnMarkerClickListener {
+
+            // To prevent crash on user clicking his own location marker
+            if (it.title != "Location Of you") {
+                mainViewModel.onInfoDialogStatusChanged(true)
+                selectedMarker = it
 
 
-                }
+            }
+            false
+        }
+
+    }
+
+
+}
 
 
             }
@@ -165,17 +165,7 @@ fun CustomMapView(
         }
     )
 
-    if (infoDialog) {
 
-        InfoPopup(mainViewModel, selectedCategory, selectedMarker)
-    }
-
-
-    if (openDialog) {
-
-        AlertDialogComponent(context = context, mainViewModel, contributeLatLng)
-
-    }
 }
 
 

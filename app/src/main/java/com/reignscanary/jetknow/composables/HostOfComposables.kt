@@ -30,10 +30,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
+import com.google.android.gms.maps.MapView
+import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.Task
 import com.reignscanary.jetknow.MainScreenViewModel
 import com.reignscanary.jetknow.locationManager
+import com.reignscanary.jetknow.zoomToCurrentLocation
 import java.lang.Exception
 
 var fusedLocation:Location? =null
@@ -52,7 +55,12 @@ fun HostOfComposables(
     val searchText: String by mainScreenViewModel.searchText.observeAsState("Search")
     val context = LocalContext.current
     val isLoading by mainScreenViewModel.isLoading.observeAsState(false)
-
+    val selectedCategory: String by mainScreenViewModel.selectedCategory.observeAsState("")
+    val openDialog by mainScreenViewModel.dialogStatus.observeAsState(initial = false)
+    val infoDialog by mainScreenViewModel.infoDialog.observeAsState(initial = false)
+    val contributeLatLng by mainScreenViewModel.contributeLatLng.observeAsState(LatLng(0.0, 0.0))
+    val isLocationButtonClicked by mainScreenViewModel.onLocationFabClick.observeAsState(false)
+    val mapView = MapView(context)
 
     Scaffold (
         topBar = {
@@ -74,6 +82,9 @@ fun HostOfComposables(
             }},
         floatingActionButton = {
             FloatingActionButton(onClick = {
+
+
+
                 if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                     enableGps(context)
                     Toast.makeText(context, "Enable GPS", Toast.LENGTH_SHORT).show()
@@ -81,6 +92,7 @@ fun HostOfComposables(
 
                 } else {
                     //on Fab Click update the position value to the current location of the user
+                    mainScreenViewModel.onLocationClicked(true)
                          try{
                             fusedLocationProviderClient =
                                 LocationServices.getFusedLocationProviderClient(context)
@@ -181,16 +193,43 @@ catch (e : Exception){
     ){
 Box(contentAlignment = Alignment.Center) {
 
-
+    val cameraPosition = CameraPosition.Builder()
+        .target(latLng) // Sets the center of the map to Mountain View
+        .zoom(17f)            // Sets the zoom
+        .bearing(90f)         // Sets the orientation of the camera to east
+        .tilt(45f)            // Sets the tilt of the camera to 30 degrees
+        .build()              // Creates a CameraPosition from the builder
     CustomMapView(
         DEFAULT_LOCATION = latLng,
         savedInstanceState = savedInstanceState,
         modifier = Modifier
             .padding(top = 6.dp, start = 16.dp, end = 16.dp, bottom = 10.dp)
             .shadow(elevation = 8.dp, shape = MaterialTheme.shapes.large)
-            .clip(MaterialTheme.shapes.large)
+            .clip(MaterialTheme.shapes.large),
+        mapView = mapView
     )
     LoadingIndicator(isLoading =isLoading)
+
+    // To zoom to current location when user clicks the Fab(mainly to prevent recomposition)
+    if(isLocationButtonClicked){
+        mapView.getMapAsync {
+        zoomToCurrentLocation(it,cameraPosition)
+        Toast.makeText(context,"Whoeiii !!",Toast.LENGTH_SHORT).show()
+        mainScreenViewModel.onLocationClicked(false)
+
+    }}
+
+    if (infoDialog) {
+
+        InfoPopup(mainScreenViewModel, selectedCategory, selectedMarker)
+    }
+
+
+    if (openDialog) {
+
+        AlertDialogComponent(context = context, mainScreenViewModel, contributeLatLng)
+
+    }
 
 
 

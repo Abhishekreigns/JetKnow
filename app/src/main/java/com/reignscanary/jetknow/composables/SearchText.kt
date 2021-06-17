@@ -22,8 +22,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.reignscanary.jetknow.R
 import com.reignscanary.jetknow.MainScreenViewModel
-import com.reignscanary.jetknow.ui.theme.search
-
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlin.coroutines.coroutineContext
 
 @Composable
 fun SearchText(modifier: Modifier = Modifier, searchText : String, onSearchTextChange: (String) -> Unit)
@@ -31,6 +32,8 @@ fun SearchText(modifier: Modifier = Modifier, searchText : String, onSearchTextC
     val focusManager = LocalFocusManager.current
   val mainScreenViewModel : MainScreenViewModel = viewModel()
     val context  = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+
     OutlinedTextField(
         value = searchText,
         onValueChange = onSearchTextChange,
@@ -47,14 +50,12 @@ fun SearchText(modifier: Modifier = Modifier, searchText : String, onSearchTextC
         keyboardActions = KeyboardActions (
 
             onSearch = {
+
                 focusManager.clearFocus()
-                mainScreenViewModel.onListOfLatLngChanged(search(searchText, context))
-
+                coroutineScope.launch {
+                mainScreenViewModel.Search(searchText, context)
                 mainScreenViewModel.onListOfLatLngChangedStatus(true)
-                if(mainScreenViewModel.listOfLatlng.value.isNullOrEmpty()){
-
-                    Toast.makeText(context,"Try Again,a Network Problem",Toast.LENGTH_SHORT).show()
-                }
+            }
             }
                 ),
         placeholder = {
