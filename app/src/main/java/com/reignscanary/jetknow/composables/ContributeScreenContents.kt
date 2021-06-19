@@ -120,7 +120,7 @@ Box(modifier =  Modifier.weight(0.4f))
            )
            Text(
                text ="Category",
-               style = TextStyle(color = MaterialTheme.colors.onSurface ,fontSize = 20.sp,fontFamily = FontFamily(Font(R.font.opnsasnsemibold))),
+               style = TextStyle(color = MaterialTheme.colors.onSurface ,fontSize = 20.sp,fontFamily = FontFamily(Font(R.font.opensansbold))),
                modifier = Modifier.padding(top=10.dp,start = 20.dp,end = 20.dp),
                textAlign = TextAlign.Center
            )

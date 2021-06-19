@@ -1,7 +1,7 @@
 package com.reignscanary.jetknow.composables
 
 
-import android.widget.Toast
+
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
@@ -22,9 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.reignscanary.jetknow.R
 import com.reignscanary.jetknow.MainScreenViewModel
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import kotlin.coroutines.coroutineContext
 
 @Composable
 fun SearchText(modifier: Modifier = Modifier, searchText : String, onSearchTextChange: (String) -> Unit)
@@ -44,7 +42,7 @@ fun SearchText(modifier: Modifier = Modifier, searchText : String, onSearchTextC
         ,
         textStyle = TextStyle(
             color = MaterialTheme.colors.onSurface,
-            fontFamily = FontFamily(Font(R.font.opnsasnsemibold))
+            fontFamily = FontFamily(Font(R.font.opnsansregular))
         ),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
         keyboardActions = KeyboardActions (
@@ -53,8 +51,11 @@ fun SearchText(modifier: Modifier = Modifier, searchText : String, onSearchTextC
 
                 focusManager.clearFocus()
                 coroutineScope.launch {
-                mainScreenViewModel.Search(searchText, context)
-                mainScreenViewModel.onListOfLatLngChangedStatus(true)
+                    if(searchText != "") {
+                        mainScreenViewModel.Search(searchText, context)
+                        mainScreenViewModel.onListOfLatLngChangedStatus(true)
+                    }
+
             }
             }
                 ),

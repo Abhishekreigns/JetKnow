@@ -14,6 +14,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.*
 import com.reignscanary.jetknow.MainScreenViewModel
@@ -125,46 +126,49 @@ fun CustomMapView(
                     )
 
                 }
+                if(listOfLatLngChanged) {
+                    placeMarkers(list,mainViewModel,it,cameraPosition)
 
-
-if(listOfLatLngChanged) {
-
-    for (serviceLocation in list) {
-        serviceLocator =
-            it.addMarker(
-                MarkerOptions()
-                    .position(serviceLocation.key)
-                    .title(serviceLocation.value)
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
-                    .snippet(serviceLocation.value)
-
-            )
-
-        //To Show infoDialog for the selected marker of location
-        it.setOnMarkerClickListener {
-
-            // To prevent crash on user clicking his own location marker
-            if (it.title != "Location Of you") {
-                mainViewModel.onInfoDialogStatusChanged(true)
-                selectedMarker = it
-
-
+                }
             }
-            false
-        }
-
-    }
-
-
-}
-
-
-            }
-
-
         }
     )
+}
 
+fun placeMarkers(list : HashMap<LatLng,String>,mainViewModel : MainScreenViewModel,googleMap: GoogleMap,cameraPosition : CameraPosition) {
+
+
+    googleMap.apply {
+        // to zoomout a bit above the current view and center the services around the user's current location
+        this.animateCamera(CameraUpdateFactory.zoomOut())
+        this.animateCamera(CameraUpdateFactory.zoomTo(6f), 2000, null)
+        this.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+        for (serviceLocation in list) {
+            serviceLocator =
+                this.addMarker(
+                    MarkerOptions()
+                        .position(serviceLocation.key)
+                        .title(serviceLocation.value)
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
+                        .snippet(serviceLocation.value)
+
+                )
+
+            //To Show infoDialog for the selected marker of location
+            this.setOnMarkerClickListener {
+
+                // To prevent crash on user clicking his own location marker
+                if (it.title != "Location Of you") {
+                    mainViewModel.onInfoDialogStatusChanged(true)
+                    selectedMarker = it
+
+
+                }
+                false
+            }
+
+        }
+    }
 
 }
 

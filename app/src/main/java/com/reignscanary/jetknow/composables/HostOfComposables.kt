@@ -82,106 +82,9 @@ fun HostOfComposables(
             }},
         floatingActionButton = {
             FloatingActionButton(onClick = {
-
-
-
-                if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                    enableGps(context)
-                    Toast.makeText(context, "Enable GPS", Toast.LENGTH_SHORT).show()
-
-
-                } else {
-                    //on Fab Click update the position value to the current location of the user
-                    mainScreenViewModel.onLocationClicked(true)
-                         try{
-                            fusedLocationProviderClient =
-                                LocationServices.getFusedLocationProviderClient(context)
-                            fusedLocationProviderClient.lastLocation.addOnSuccessListener {
-                                fusedLocation = it
-                            }
-                             locationManager.requestLocationUpdates(
-        LocationManager.GPS_PROVIDER,
-        1000L,
-        100f,
-        object :LocationListener{
-
-            override fun onLocationChanged(p0: Location?) {
-              if(p0!=null){
-                  gpsLocation = p0
-              }
-            }
-
-            override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {
-
-            }
-
-            override fun onProviderEnabled(p0: String?) {
-
-            }
-
-            override fun onProviderDisabled(p0: String?) {
-
-            }
-
-        }
-                             )
-                         }
-catch (e : Exception){
-
-    Toast.makeText(context,"${e.stackTrace}",Toast.LENGTH_SHORT).show()
-}
-
-
-                    if(gpsLocation!=null) {
-                        mainScreenViewModel.onLatLngUpdate(
-                            LatLng(
-                                gpsLocation!!.latitude,
-                                gpsLocation!!.longitude
-                            )
-                        )
-
-                        if(i <= 2)
-                        { Toast(context).cancel()
-                            Toast.makeText(context,"Loading.....", Toast.LENGTH_LONG).show()}
-                        i++
-                    }
-                    else {
-
-                        if(i==1) {
-                            Toast(context).cancel()
-                            Toast.makeText(
-                                context,
-                                "GPS signal is low!!,using approximate location",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                        else{
-                            Toast(context).cancel()
-                            Toast.makeText(
-                                context,
-                                "Click Again to get an accurate location",
-                                Toast.LENGTH_SHORT
-                            ).show()
-
-
-                        }
-                        fusedLocation?.let {
-                            LatLng(
-                                it.latitude,
-                                it.longitude
-                            )
-                        }?.let { mainScreenViewModel.onLatLngUpdate(it) }
-                        i++
-
-                    }
-
-                }
-
-
-
-
-            },backgroundColor = MaterialTheme.colors.secondary,
-                contentColor = MaterialTheme.colors.onSecondary
+                gotoLocation(context,mainScreenViewModel)
+                                           },backgroundColor = MaterialTheme.colors.primary,
+                contentColor = MaterialTheme.colors.onPrimary
 
             ){
 
@@ -204,7 +107,7 @@ Box(contentAlignment = Alignment.Center) {
         savedInstanceState = savedInstanceState,
         modifier = Modifier
             .padding(top = 6.dp, start = 16.dp, end = 16.dp, bottom = 10.dp)
-            .shadow(elevation = 8.dp, shape = MaterialTheme.shapes.large)
+            .shadow(elevation = 4.dp,MaterialTheme.shapes.large)
             .clip(MaterialTheme.shapes.large),
         mapView = mapView
     )
@@ -237,11 +140,128 @@ Box(contentAlignment = Alignment.Center) {
         //Align all the composables in a column
     }
 }
+
+@SuppressLint("MissingPermission")
+fun gotoLocation(context : Context, mainScreenViewModel : MainScreenViewModel) {
+
+    if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+        enableGps(context)
+        Toast.makeText(context, "Enable GPS", Toast.LENGTH_SHORT).show()
+
+
+    } else {
+        //on Fab Click update the position value to the current location of the user
+        mainScreenViewModel.onLocationClicked(true)
+        try{
+            fusedLocationProviderClient =
+                LocationServices.getFusedLocationProviderClient(context)
+            fusedLocationProviderClient.lastLocation.addOnSuccessListener {
+                fusedLocation = it
+            }
+            locationManager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER,
+                1000L,
+                100f,
+                object :LocationListener{
+
+                    override fun onLocationChanged(p0: Location?) {
+                        if(p0!=null){
+                            gpsLocation = p0
+                        }
+                    }
+
+                    override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {
+
+                    }
+
+                    override fun onProviderEnabled(p0: String?) {
+
+                    }
+
+                    override fun onProviderDisabled(p0: String?) {
+
+                    }
+
+                }
+            )
+        }
+        catch (e : Exception){
+
+            Toast.makeText(context,"${e.stackTrace}",Toast.LENGTH_SHORT).show()
+        }
+
+
+        if(gpsLocation!=null) {
+            mainScreenViewModel.onLatLngUpdate(
+                LatLng(
+                    gpsLocation!!.latitude,
+                    gpsLocation!!.longitude
+                )
+            )
+
+            if(i <= 2)
+            { Toast(context).cancel()
+                Toast.makeText(context,"Loading.....", Toast.LENGTH_LONG).show()}
+            i++
+        }
+        else {
+
+            if(i==1) {
+                Toast(context).cancel()
+                Toast.makeText(
+                    context,
+                    "GPS signal is low!!,using approximate location",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            else{
+                Toast(context).cancel()
+                Toast.makeText(
+                    context,
+                    "Click Again to get an accurate location",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+
+            }
+            fusedLocation?.let {
+                LatLng(
+                    it.latitude,
+                    it.longitude
+                )
+            }?.let { mainScreenViewModel.onLatLngUpdate(it) }
+            i++
+
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+
 @Composable
 fun CustomBottomBar() {
 
     val topRoundedCards = RoundedCornerShape(topStart = 12.dp,topEnd = 12.dp)
-BottomNavigation(modifier = Modifier.clip(topRoundedCards),backgroundColor = MaterialTheme.colors.secondary,contentColor = MaterialTheme.colors.onSecondary,content =
+BottomNavigation(modifier = Modifier.clip(topRoundedCards),backgroundColor = MaterialTheme.colors.surface,contentColor = MaterialTheme.colors.onSurface,content =
 
 
 {

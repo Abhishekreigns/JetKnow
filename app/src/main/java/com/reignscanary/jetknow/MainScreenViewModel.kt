@@ -36,6 +36,15 @@ val isLoading : LiveData<Boolean> = _isLoading
     val listOfLatlngChanged : LiveData<Boolean> = _listOfLatlngChanged
     private val _onLocationFabClick = MutableLiveData(false)
     val onLocationFabClick : LiveData<Boolean> = _onLocationFabClick
+
+        // This function exists just to clear the list of latlng on dismissing a category(should find alternatives)
+    fun onListOfLatLngChanged(newListOfLatLng :HashMap<LatLng,String>)
+    {
+            _isLoading.value = true
+            _listOfLatlng.value = newListOfLatLng
+            _isLoading.value = false
+
+}
     fun onLocationClicked(newLocationClickStatus : Boolean){
 
         _onLocationFabClick.value = newLocationClickStatus
@@ -45,6 +54,7 @@ val isLoading : LiveData<Boolean> = _isLoading
 
         _listOfLatlngChanged.value = newStatusOfList
     }
+
     suspend fun Search(category: String, context: Context) {
 
 
@@ -76,6 +86,9 @@ val isLoading : LiveData<Boolean> = _isLoading
             delay(3000)
             _listOfLatlng.value = listOfLatLng
             _isLoading.value = false
+            if(_listOfLatlng.value.isNullOrEmpty()){
+                Toast.makeText(context,"Network Error",Toast.LENGTH_SHORT).show()
+            }
         }
 
     }

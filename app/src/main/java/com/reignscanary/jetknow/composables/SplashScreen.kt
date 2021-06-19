@@ -1,7 +1,9 @@
 package com.reignscanary.jetknow.composables
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -20,7 +22,8 @@ fun SplashScreen()
 
 Box(modifier = Modifier.fillMaxSize(),contentAlignment = Alignment.Center) {
 
-    Text(modifier = Modifier,text="JetKnow", style = TextStyle(fontSize =28.sp,fontFamily = FontFamily(Font(R.font.opnsasnsemibold))))
+
+    Text(modifier = Modifier,text="JetKnow", style = TextStyle(fontSize =30.sp,fontFamily = FontFamily(Font(R.font.opnsasnsemibold))))
 
 }
 

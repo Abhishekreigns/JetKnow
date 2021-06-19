@@ -64,18 +64,18 @@ val coroutineScope = rememberCoroutineScope()
                         //To switch off the chip when user clicks the chip again
                         else {
                             onSelectedCategoryChanged("")
-                            mainScreenViewModel.onListOfLatLngChangedStatus(true)
+                            mainScreenViewModel.onListOfLatLngChanged(HashMap())
+                            mainScreenViewModel.onListOfLatLngChangedStatus(false)
                         }
-
                     }
 
                 )
 
         ) {
             Text(text = category, textAlign = TextAlign.Center,modifier = Modifier
-                .fillMaxSize(1f),
+                .weight(3f),
                 style = TextStyle(color = MaterialTheme.colors.onSecondary,fontSize = 14.sp,fontFamily = FontFamily(
-                    Font(R.font.opensansbold)))
+                    Font(R.font.opnsansregular)))
                 )
 
         }
