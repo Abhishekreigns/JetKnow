@@ -2,7 +2,6 @@ package com.reignscanary.jetknow.composables
 
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,9 +16,8 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.*
-import com.reignscanary.jetknow.MainScreenViewModel
+import com.reignscanary.jetknow.backend.MainScreenViewModel
 import com.reignscanary.jetknow.R
-import com.reignscanary.jetknow.zoomToCurrentLocation
 
 lateinit var marker :Marker
 lateinit var   serviceLocator : Marker
@@ -135,7 +133,7 @@ fun CustomMapView(
     )
 }
 
-fun placeMarkers(list : HashMap<LatLng,String>,mainViewModel : MainScreenViewModel,googleMap: GoogleMap,cameraPosition : CameraPosition) {
+fun placeMarkers(list : HashMap<LatLng,String>, mainViewModel : MainScreenViewModel, googleMap: GoogleMap, cameraPosition : CameraPosition) {
 
 
     googleMap.apply {

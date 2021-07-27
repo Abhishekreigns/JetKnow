@@ -1,10 +1,8 @@
-package com.reignscanary.jetknow
+package com.reignscanary.jetknow.backend
 
 
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -61,7 +59,7 @@ val isLoading : LiveData<Boolean> = _isLoading
             val databaseInstance = FirebaseDatabase.getInstance()
             val dataRef: DatabaseReference = databaseInstance.reference.child("Categories").child(category)
 
-        var listOfLatLng = HashMap<LatLng, String>()
+        val listOfLatLng = HashMap<LatLng, String>()
         _isLoading.value = true
         val valueEventListener = object : ValueEventListener {
         override fun onDataChange(snapshot: DataSnapshot) {
@@ -70,7 +68,7 @@ val isLoading : LiveData<Boolean> = _isLoading
             for (keySnapshot: DataSnapshot in snapshot.children) {
                 val contr: Contributions? = keySnapshot.getValue(Contributions::class.java)
                 if (contr != null) {
-                    listOfLatLng.put(LatLng(contr.lat, contr.lng), contr.number)
+                    listOfLatLng[LatLng(contr.lat, contr.lng)] = contr.number
                 }
             }
         }
@@ -83,12 +81,10 @@ val isLoading : LiveData<Boolean> = _isLoading
     dataRef.addValueEventListener(valueEventListener)
         viewModelScope.launch {
             //delaying until the services are searched(should be done using a coroutine)
-            delay(3000)
+            delay(5000)
             _listOfLatlng.value = listOfLatLng
             _isLoading.value = false
-            if(_listOfLatlng.value.isNullOrEmpty()){
-                Toast.makeText(context,"Network Error",Toast.LENGTH_SHORT).show()
-            }
+
         }
 
     }

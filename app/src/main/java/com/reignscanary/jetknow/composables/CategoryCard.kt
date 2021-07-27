@@ -1,5 +1,7 @@
 package com.reignscanary.jetknow.composables
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -8,6 +10,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
@@ -17,12 +20,9 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.reignscanary.jetknow.R
-import android.content.Context
-import android.widget.Toast
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.reignscanary.jetknow.MainScreenViewModel
+import com.reignscanary.jetknow.backend.MainScreenViewModel
+import com.reignscanary.jetknow.R
 import kotlinx.coroutines.launch
 
 @Composable
@@ -39,8 +39,10 @@ val coroutineScope = rememberCoroutineScope()
         modifier= modifier
             .padding(top = 2.dp, bottom = 2.dp, end = 2.dp)
             .clip(MaterialTheme.shapes.medium),
-        color = if(isSelected)
+        color = if(isSelected) {
+            Toast.makeText(LocalContext.current, "$isSelected", Toast.LENGTH_SHORT).show()
             MaterialTheme.colors.secondary
+        }
         else
             MaterialTheme.colors.surface
 

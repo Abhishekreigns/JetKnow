@@ -2,12 +2,10 @@ package com.reignscanary.jetknow.composables
 
 import android.content.Intent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -15,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -22,7 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.android.gms.maps.model.LatLng
-import com.reignscanary.jetknow.ContributeActivity
+import com.reignscanary.jetknow.activities.ContributeActivity
 import com.reignscanary.jetknow.R
 
 @Composable
@@ -33,7 +32,7 @@ fun LoginPage(latlng: LatLng?) {
         mutableStateOf("")
     }
     val topRoundedCards = RoundedCornerShape(topStart = 16.dp,topEnd = 16.dp)
-    var loginpassword = remember {
+    val loginpassword = remember {
         mutableStateOf("")
     }
 
@@ -108,7 +107,7 @@ fun LoginPage(latlng: LatLng?) {
                     Button(onClick = {
 
                         i = Intent(context, ContributeActivity::class.java)
-                        i.putExtra("latlng", latlng)
+
                         context.startActivity(i)
                     },
                         modifier = Modifier
@@ -118,6 +117,24 @@ fun LoginPage(latlng: LatLng?) {
                             R.font.opensansbold))))
 
                     }
+                    Text(
+                        text = "REGISTER",
+                        style = TextStyle(fontFamily = FontFamily(Font(
+                        R.font.opensansbold))),
+                        modifier = Modifier.clickable{
+                            /*TODO*/
+                        }
+                    )
+                     IconButton(onClick = {
+                         /*TODO*/
+
+                     },
+
+                         modifier = Modifier.padding(top = 10.dp)
+                ){
+                         Icon(painter = painterResource(id = R.drawable.google),"Google")
+                     }
+
 
                 }
             }

@@ -21,11 +21,11 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.reignscanary.jetknow.R
-import com.reignscanary.jetknow.MainScreenViewModel
+import com.reignscanary.jetknow.backend.MainScreenViewModel
 import kotlinx.coroutines.launch
 
 @Composable
-fun SearchText(modifier: Modifier = Modifier, searchText : String, onSearchTextChange: (String) -> Unit)
+fun SearchText(modifier: Modifier = Modifier, searchText : String , onSearchTextChange: (String) -> Unit)
 {
     val focusManager = LocalFocusManager.current
   val mainScreenViewModel : MainScreenViewModel = viewModel()

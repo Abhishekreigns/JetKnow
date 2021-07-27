@@ -4,7 +4,6 @@ import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.*
@@ -15,13 +14,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.firebase.database.*
-import com.reignscanary.jetknow.Contributions
-import com.reignscanary.jetknow.MainScreenViewModel
+import com.reignscanary.jetknow.backend.MainScreenViewModel
 @Composable
-fun InfoPopup(mainScreenViewModel: MainScreenViewModel,selectedCategory : String ,selectedMarker: Marker){
+fun InfoPopup(mainScreenViewModel: MainScreenViewModel, selectedCategory : String, selectedMarker: Marker){
 
 
 

@@ -1,4 +1,4 @@
-package com.reignscanary.jetknow
+package com.reignscanary.jetknow.backend
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -6,7 +6,6 @@ import com.google.android.gms.maps.model.CameraPosition
 
 
 fun zoomToCurrentLocation(googleMap : GoogleMap,cameraPosition: CameraPosition) {
-
 
     googleMap.apply{
 

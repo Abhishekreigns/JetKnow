@@ -9,16 +9,10 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import android.widget.Toast
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,23 +28,25 @@ import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.Task
-import com.reignscanary.jetknow.MainScreenViewModel
-import com.reignscanary.jetknow.locationManager
-import com.reignscanary.jetknow.zoomToCurrentLocation
+import com.reignscanary.jetknow.backend.MainScreenViewModel
+import com.reignscanary.jetknow.activities.locationManager
+import com.reignscanary.jetknow.backend.zoomToCurrentLocation
 import java.lang.Exception
+import androidx.compose.foundation.layout.*
+import androidx.compose.runtime.*
+
 
 var fusedLocation:Location? =null
 var   gpsLocation : Location? = null
-@SuppressLint("StaticFieldLeak")
-lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-var i =0
+
+
 @SuppressLint("MissingPermission")
 @Composable
 fun HostOfComposables(
     mainScreenViewModel: MainScreenViewModel = viewModel(),
     savedInstanceState: Bundle?)
 {
-
+    val state  = rememberScaffoldState()
     val latLng: LatLng by mainScreenViewModel.latLng.observeAsState(LatLng(20.8021, 78.24813))
     val searchText: String by mainScreenViewModel.searchText.observeAsState("Search")
     val context = LocalContext.current
@@ -62,24 +58,23 @@ fun HostOfComposables(
     val isLocationButtonClicked by mainScreenViewModel.onLocationFabClick.observeAsState(false)
     val mapView = MapView(context)
 
-    Scaffold (
-        topBar = {
-            Column(
-                modifier = Modifier
-                    .padding(10.dp)
-            ) {
-            SearchText(
-                searchText = searchText,
-                onSearchTextChange = { mainScreenViewModel.onSearchTextChange(it) })
+    Scaffold(
+        topBar={
+        Column(
+            modifier = Modifier
+            .padding(10.dp
+            )) {
+                SearchText(
+                    searchText = searchText,
+                    onSearchTextChange = { mainScreenViewModel.onSearchTextChange(it) })
 
-                CategoriesCarousel(
-                    modifier =
-                    Modifier
-                        .requiredSize(100.dp)
-                        .clip(MaterialTheme.shapes.large)
-                        .padding(8.dp)
-                )
-            }},
+                    CategoriesCarousel(
+                        modifier =
+                        Modifier
+                            .requiredSize(100.dp)
+                            .clip(MaterialTheme.shapes.large)
+                            .padding(8.dp)
+                    ) } },
         floatingActionButton = {
             FloatingActionButton(onClick = {
                 gotoLocation(context,mainScreenViewModel)
@@ -90,60 +85,50 @@ fun HostOfComposables(
 
                 Icon(imageVector = Icons.Filled.LocationOn, contentDescription = "CurrentLocation")
             }
-        },floatingActionButtonPosition = FabPosition.End
-    ,bottomBar = { CustomBottomBar() }
+        },floatingActionButtonPosition = FabPosition.End,
+      bottomBar = { CustomBottomBar() },
+        scaffoldState = state,
+        drawerBackgroundColor = MaterialTheme.colors.surface,
 
     ){
-Box(contentAlignment = Alignment.Center) {
-
-    val cameraPosition = CameraPosition.Builder()
-        .target(latLng) // Sets the center of the map to Mountain View
-        .zoom(17f)            // Sets the zoom
-        .bearing(90f)         // Sets the orientation of the camera to east
-        .tilt(45f)            // Sets the tilt of the camera to 30 degrees
-        .build()              // Creates a CameraPosition from the builder
+        Box(contentAlignment = Alignment.Center) {
+            val cameraPosition = CameraPosition.Builder()
+                .target(latLng) // Sets the center of the map to Mountain View
+                 .zoom(17f)            // Sets the zoom
+                  .bearing(90f)         // Sets the orientation of the camera to east
+                   .tilt(45f)            // Sets the tilt of the camera to 30 degrees
+                    .build()              // Creates a CameraPosition from the builder
     CustomMapView(
         DEFAULT_LOCATION = latLng,
         savedInstanceState = savedInstanceState,
         modifier = Modifier
             .padding(top = 6.dp, start = 16.dp, end = 16.dp, bottom = 10.dp)
-            .shadow(elevation = 4.dp,MaterialTheme.shapes.large)
+            .shadow(elevation = 4.dp, MaterialTheme.shapes.large)
             .clip(MaterialTheme.shapes.large),
         mapView = mapView
     )
     LoadingIndicator(isLoading =isLoading)
-
     // To zoom to current location when user clicks the Fab(mainly to prevent recomposition)
     if(isLocationButtonClicked){
         mapView.getMapAsync {
         zoomToCurrentLocation(it,cameraPosition)
-        Toast.makeText(context,"Whoeiii !!",Toast.LENGTH_SHORT).show()
         mainScreenViewModel.onLocationClicked(false)
 
     }}
-
     if (infoDialog) {
-
         InfoPopup(mainScreenViewModel, selectedCategory, selectedMarker)
     }
-
-
     if (openDialog) {
-
         AlertDialogComponent(context = context, mainScreenViewModel, contributeLatLng)
-
     }
-
-
 
 }
-        //Align all the composables in a column
-    }
+   }
 }
 
 @SuppressLint("MissingPermission")
 fun gotoLocation(context : Context, mainScreenViewModel : MainScreenViewModel) {
-
+    lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
         enableGps(context)
         Toast.makeText(context, "Enable GPS", Toast.LENGTH_SHORT).show()
@@ -152,7 +137,29 @@ fun gotoLocation(context : Context, mainScreenViewModel : MainScreenViewModel) {
     } else {
         //on Fab Click update the position value to the current location of the user
         mainScreenViewModel.onLocationClicked(true)
-        try{
+        try {
+            val locationListener: LocationListener = object : LocationListener {
+                override fun onLocationChanged(location: Location) {
+                    println("DEBUG 1")
+                    gpsLocation = location
+                }
+
+                override fun onProviderEnabled(provider: String) {
+                    println("DEBUG 2")
+                    Toast.makeText(context, "Great!!", Toast.LENGTH_LONG).show()
+                }
+
+                override fun onProviderDisabled(provider: String) {
+                    println("DEBUG 3")
+                    Toast.makeText(context, "onProviderDisabled", Toast.LENGTH_LONG)
+                        .show()
+                }
+
+                override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {
+                    println("DEBUG 4")
+
+                }
+            }
             fusedLocationProviderClient =
                 LocationServices.getFusedLocationProviderClient(context)
             fusedLocationProviderClient.lastLocation.addOnSuccessListener {
@@ -161,37 +168,14 @@ fun gotoLocation(context : Context, mainScreenViewModel : MainScreenViewModel) {
             locationManager.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER,
                 1000L,
-                100f,
-                object :LocationListener{
-
-                    override fun onLocationChanged(p0: Location?) {
-                        if(p0!=null){
-                            gpsLocation = p0
-                        }
-                    }
-
-                    override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {
-
-                    }
-
-                    override fun onProviderEnabled(p0: String?) {
-
-                    }
-
-                    override fun onProviderDisabled(p0: String?) {
-
-                    }
-
-                }
+                100f, locationListener
             )
-        }
-        catch (e : Exception){
-
-            Toast.makeText(context,"${e.stackTrace}",Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            Toast.makeText(context, "${e.stackTrace}", Toast.LENGTH_SHORT).show()
         }
 
 
-        if(gpsLocation!=null) {
+        if (gpsLocation != null) {
             mainScreenViewModel.onLatLngUpdate(
                 LatLng(
                     gpsLocation!!.latitude,
@@ -199,63 +183,22 @@ fun gotoLocation(context : Context, mainScreenViewModel : MainScreenViewModel) {
                 )
             )
 
-            if(i <= 2)
-            { Toast(context).cancel()
+           Toast(context).cancel()
                 Toast.makeText(context,"Loading.....", Toast.LENGTH_LONG).show()}
-            i++
-        }
-        else {
-
-            if(i==1) {
-                Toast(context).cancel()
-                Toast.makeText(
-                    context,
-                    "GPS signal is low!!,using approximate location",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-            else{
-                Toast(context).cancel()
-                Toast.makeText(
-                    context,
-                    "Click Again to get an accurate location",
-                    Toast.LENGTH_SHORT
-                ).show()
-
-
-            }
+        else{
+            Toast.makeText(context,"Using Approximate location,GPS signal is low", Toast.LENGTH_LONG).show()}
             fusedLocation?.let {
                 LatLng(
                     it.latitude,
                     it.longitude
                 )
             }?.let { mainScreenViewModel.onLatLngUpdate(it) }
-            i++
 
         }
-
     }
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-}
 
 @Composable
 fun CustomBottomBar() {
@@ -282,7 +225,7 @@ BottomNavigationItem(selected = false, onClick = { /*TODO*/ },icon = {
 
 
     BottomNavigationItem(selected = false, onClick = { /*TODO*/ },icon = {
-        Icon(imageVector = Icons.Filled.AccountBox, contentDescription = "Acount" )
+        Icon(imageVector = Icons.Filled.AccountBox, contentDescription = "Account" )
 
     },label = {
         Text(text = "Account")
@@ -304,8 +247,7 @@ fun enableGps(context: Context) {
     result.addOnCompleteListener {
         task->
         try {
-            val response = task.getResult(ApiException::class.java)
-
+           task.getResult(ApiException::class.java)
 
         }
         catch (exception: ApiException)
@@ -324,7 +266,7 @@ fun enableGps(context: Context) {
                     }
                 }
                 LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE -> {
-                    Toast.makeText(context,"If you give only,it will work good", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context,"If you give the permission,it would be easier to find the locations", Toast.LENGTH_SHORT).show()
                 }
             }
         }

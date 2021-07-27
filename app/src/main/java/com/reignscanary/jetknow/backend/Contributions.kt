@@ -1,4 +1,4 @@
-package com.reignscanary.jetknow
+package com.reignscanary.jetknow.backend
 
 
 data class Contributions(
