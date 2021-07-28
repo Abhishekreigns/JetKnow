@@ -1,8 +1,5 @@
 package com.reignscanary.jetknow.composables
 
-import android.content.Context
-import android.content.Intent
-import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardActions
@@ -28,12 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.maps.model.LatLng
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import com.reignscanary.jetknow.R
-import com.reignscanary.jetknow.activities.MainActivity
-import com.reignscanary.jetknow.backend.Contributions
 import com.reignscanary.jetknow.backend.MainScreenViewModel
 import com.reignscanary.jetknow.backend.updateDetails
 
@@ -47,6 +39,9 @@ var name : String by remember {
    var phoneNumber : String by remember {
        mutableStateOf("")
    }
+    var address by remember {
+        mutableStateOf("")
+    }
     val context = LocalContext.current
     val mainScreenViewModel : MainScreenViewModel = viewModel()
     val searchText :String by mainScreenViewModel.searchText.observeAsState("" )
@@ -109,6 +104,38 @@ LazyColumn(modifier =  Modifier.weight(0.4f))
                    }
                )
            )
+        //Address Field
+        Text(
+            text = "Address",
+            style = TextStyle(
+                color = MaterialTheme.colors.onSurface,
+                fontSize = 20.sp,
+                fontFamily = FontFamily(Font(R.font.opensansbold))
+            ),
+            modifier = Modifier.padding(top = 10.dp, start = 20.dp, end = 20.dp),
+            textAlign = TextAlign.Center
+        )
+        TextField(
+            value = address, onValueChange = {
+                address = it
+            }, modifier = Modifier
+                .fillMaxWidth(1f)
+                .padding(top = 16.dp, end = 20.dp, start = 20.dp)
+                .clip(MaterialTheme.shapes.large),
+            singleLine = true,
+            placeholder = {
+                Text(text = "Address")
+            },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    //to hide the keyboard after user finishes entering the number
+                    focusManager.clearFocus()
+                }
+            )
+        )
+
+        //Category field
            Text(
                text = "Category",
                style = TextStyle(
@@ -141,7 +168,7 @@ LazyColumn(modifier =  Modifier.weight(0.4f))
 
                Button(
                    onClick = {
-                       updateDetails(context, searchText, name, phoneNumber, latlng)
+                       updateDetails(context, searchText, name, phoneNumber,address,latlng)
 
                    },
                    modifier = Modifier.fillMaxWidth(0.30f)

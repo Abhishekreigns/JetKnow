@@ -22,7 +22,7 @@ fun InfoPopup(mainScreenViewModel: MainScreenViewModel, selectedCategory : Strin
 
 
 
-    val address = remember { mutableStateOf("no:2," +
+    var address by remember { mutableStateOf("no:2," +
             " new street," +
             " new area," +
             " chennai-28")
@@ -41,6 +41,7 @@ var name by remember {
         override fun onDataChange(snapshot: DataSnapshot) {
             name = snapshot.child("name").value.toString()
             number = snapshot.child("number").value.toString()
+            address = snapshot.child("address").value.toString()
 
         }
 
@@ -69,7 +70,7 @@ var name by remember {
                 Text(text = name, color = MaterialTheme.colors.onSurface)
                 Spacer(modifier = Modifier.padding(10.dp))
                 Text(text = "Address :", fontWeight = FontWeight.Bold)
-                Text(text = address.value, color = MaterialTheme.colors.onSurface)
+                Text(text = address, color = MaterialTheme.colors.onSurface)
                 Spacer(modifier = Modifier.padding(10.dp))
                 Text(text = "Mobile number :", fontWeight = FontWeight.Bold)
                 Text(text = number, color = MaterialTheme.colors.onSurface)

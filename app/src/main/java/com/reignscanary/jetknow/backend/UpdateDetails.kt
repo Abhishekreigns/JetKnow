@@ -12,6 +12,7 @@ import com.reignscanary.jetknow.activities.MainActivity
 fun updateDetails(
     context: Context, searchText: String, name: String,
     number: String,
+    address: String,
     contributeLatLng: LatLng
 ) {
 
@@ -19,9 +20,9 @@ fun updateDetails(
     val user = FirebaseAuth.getInstance()
     val  dataRef : DatabaseReference = databaseInstance.reference
     val id = dataRef.push().key.toString()
-    val contribution = Contributions(id,contributeLatLng.latitude,contributeLatLng.longitude,name,number,searchText)
+    val contribution = Contributions(id,contributeLatLng.latitude,contributeLatLng.longitude,name,number,address,searchText)
 
-    if(number.isBlank() || name.isBlank() || searchText.isBlank()){
+    if(number.isBlank() || name.isBlank() || searchText.isBlank() || address.isBlank()){
 
         Toast.makeText(context,"Enter all the details", Toast.LENGTH_SHORT).show()
     }

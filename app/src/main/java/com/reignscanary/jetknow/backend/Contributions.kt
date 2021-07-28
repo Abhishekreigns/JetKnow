@@ -7,5 +7,6 @@ data class Contributions(
     val lng: Double = 0.0,
     val name: String = "",
     val number: String ="",
+    val address: String = "",
     val searchText: String =""
 )

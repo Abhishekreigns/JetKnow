@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.IntentSender
+import android.content.SharedPreferences
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
@@ -34,6 +35,7 @@ import com.reignscanary.jetknow.backend.zoomToCurrentLocation
 import java.lang.Exception
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
+import com.reignscanary.jetknow.activities.MainActivity
 
 
 var fusedLocation:Location? =null
@@ -44,10 +46,14 @@ var   gpsLocation : Location? = null
 @Composable
 fun HostOfComposables(
     mainScreenViewModel: MainScreenViewModel = viewModel(),
-    savedInstanceState: Bundle?)
-{
+    savedInstanceState: Bundle?,
+cachedLocation : SharedPreferences)
+{    //Getting cached location,if no location cached or new user,default values will be used
+    val lat: String? = cachedLocation.getString("LOCATION_LAT", "20.8021")
+    val lon: String? = cachedLocation.getString("LOCATION_LON", "78.24813")
     val state  = rememberScaffoldState()
-    val latLng: LatLng by mainScreenViewModel.latLng.observeAsState(LatLng(20.8021, 78.24813))
+
+    val latLng: LatLng by mainScreenViewModel.latLng.observeAsState(LatLng(lat.toString().toDouble(), lon.toString().toDouble()))
     val searchText: String by mainScreenViewModel.searchText.observeAsState("Search")
     val context = LocalContext.current
     val isLoading by mainScreenViewModel.isLoading.observeAsState(false)
@@ -57,7 +63,8 @@ fun HostOfComposables(
     val contributeLatLng by mainScreenViewModel.contributeLatLng.observeAsState(LatLng(0.0, 0.0))
     val isLocationButtonClicked by mainScreenViewModel.onLocationFabClick.observeAsState(false)
     val mapView = MapView(context)
-
+    //To check if the app status
+     var appJustGotOpened = true
     Scaffold(
         topBar={
         Column(
@@ -77,7 +84,7 @@ fun HostOfComposables(
                     ) } },
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                gotoLocation(context,mainScreenViewModel)
+                gotoLocation(context,mainScreenViewModel,cachedLocation)
                                            },backgroundColor = MaterialTheme.colors.primary,
                 contentColor = MaterialTheme.colors.onPrimary
 
@@ -93,13 +100,46 @@ fun HostOfComposables(
     ){
         Box(contentAlignment = Alignment.Center) {
             val cameraPosition = CameraPosition.Builder()
-                .target(latLng) // Sets the center of the map to Mountain View
+                .target(
+                    if(appJustGotOpened)
+                {//To update the cached location to the ViewModel
+                    mainScreenViewModel.onLatLngUpdate(
+                        LatLng(
+                            lat.toString().toDouble(),
+                            lon.toString().toDouble()
+                        )
+                    )
+                    //To load the map to zoom to cached location on app restart
+                    LatLng(lat.toString().toDouble(), lon.toString().toDouble())
+                }
+                else
+                    //To dynamically change the map to zoom to current location
+                    latLng
+                ) // Sets the center of the map to Mountain View
                  .zoom(17f)            // Sets the zoom
                   .bearing(90f)         // Sets the orientation of the camera to east
                    .tilt(45f)            // Sets the tilt of the camera to 30 degrees
                     .build()              // Creates a CameraPosition from the builder
-    CustomMapView(
-        DEFAULT_LOCATION = latLng,
+            CustomMapView(
+        DEFAULT_LOCATION =
+
+        if(appJustGotOpened)
+        {      appJustGotOpened = false
+            //To update the cached location to the ViewModel
+            mainScreenViewModel.onLatLngUpdate(
+                LatLng(
+                    lat.toString().toDouble(),
+                    lon.toString().toDouble()
+                )
+            )
+            //To place the marker to cached location on app restart
+            LatLng(lat.toString().toDouble(), lon.toString().toDouble())
+
+            }
+        else
+            //To dynamically place the marker on location change
+            latLng
+                ,
         savedInstanceState = savedInstanceState,
         modifier = Modifier
             .padding(top = 6.dp, start = 16.dp, end = 16.dp, bottom = 10.dp)
@@ -107,6 +147,7 @@ fun HostOfComposables(
             .clip(MaterialTheme.shapes.large),
         mapView = mapView
     )
+
     LoadingIndicator(isLoading =isLoading)
     // To zoom to current location when user clicks the Fab(mainly to prevent recomposition)
     if(isLocationButtonClicked){
@@ -127,7 +168,7 @@ fun HostOfComposables(
 }
 
 @SuppressLint("MissingPermission")
-fun gotoLocation(context : Context, mainScreenViewModel : MainScreenViewModel) {
+fun gotoLocation(context : Context, mainScreenViewModel : MainScreenViewModel,cachedLocation: SharedPreferences) {
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
         enableGps(context)
@@ -182,19 +223,42 @@ fun gotoLocation(context : Context, mainScreenViewModel : MainScreenViewModel) {
                     gpsLocation!!.longitude
                 )
             )
+            //To update the latest user location to the sharedpreferences with GPS
+            cachedLocation.edit().putString("LOCATION_LAT",
+               gpsLocation!!.latitude.toString()
+           ).apply()
+            cachedLocation.edit().putString("LOCATION_LON", gpsLocation!!.longitude.toString()
+            ).apply()
+            cachedLocation.edit().putString("LOCATION_PROVIDER", gpsLocation!!.provider.toString()).apply()
 
            Toast(context).cancel()
-                Toast.makeText(context,"Loading.....", Toast.LENGTH_LONG).show()}
+                Toast.makeText(context,"Loading.....", Toast.LENGTH_LONG).show()
+        Toast.makeText(context,"${cachedLocation.getString("LOCATION_LAT", "20.8021")}",Toast.LENGTH_SHORT).show()
+        }
         else{
-            Toast.makeText(context,"Using Approximate location,GPS signal is low", Toast.LENGTH_LONG).show()}
+
             fusedLocation?.let {
+                Toast.makeText(context,"Using Approximate location,GPS signal is low", Toast.LENGTH_LONG).show()
+                //To update the latest user location to the sharedpreferences with fusedLocation Client
+                cachedLocation.edit().putString("LOCATION_LAT",it.latitude.toString()
+                ).apply()
+                cachedLocation.edit().putString("LOCATION_LON", it.longitude.toString()
+                ).apply()
+                cachedLocation.edit().putString("LOCATION_PROVIDER", it.provider.toString()).apply()
                 LatLng(
                     it.latitude,
                     it.longitude
                 )
-            }?.let { mainScreenViewModel.onLatLngUpdate(it) }
+            }?.let {
 
-        }
+                mainScreenViewModel.onLatLngUpdate(it)
+
+
+
+            }
+
+
+        }}
     }
 
 
@@ -202,11 +266,8 @@ fun gotoLocation(context : Context, mainScreenViewModel : MainScreenViewModel) {
 
 @Composable
 fun CustomBottomBar() {
-
     val topRoundedCards = RoundedCornerShape(topStart = 12.dp,topEnd = 12.dp)
 BottomNavigation(modifier = Modifier.clip(topRoundedCards),backgroundColor = MaterialTheme.colors.surface,contentColor = MaterialTheme.colors.onSurface,content =
-
-
 {
 BottomNavigationItem(selected = false, onClick = { /*TODO*/ },icon = {
     Icon(imageVector = Icons.Filled.Place, contentDescription = "Add" )

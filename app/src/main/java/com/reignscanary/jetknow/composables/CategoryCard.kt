@@ -40,7 +40,6 @@ val coroutineScope = rememberCoroutineScope()
             .padding(top = 2.dp, bottom = 2.dp, end = 2.dp)
             .clip(MaterialTheme.shapes.medium),
         color = if(isSelected) {
-            Toast.makeText(LocalContext.current, "$isSelected", Toast.LENGTH_SHORT).show()
             MaterialTheme.colors.secondary
         }
         else

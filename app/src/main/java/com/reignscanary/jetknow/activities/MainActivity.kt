@@ -4,7 +4,9 @@ package com.reignscanary.jetknow.activities
 import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
 import android.widget.Toast
@@ -43,13 +45,15 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+            //Creating the sharedPreferences in respect to the application context
+        val sharedPreferences : SharedPreferences by lazy{ applicationContext.getSharedPreferences("LatLng", MODE_PRIVATE)}
         checkLocationPermission(this)
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         setContent {
                     JetKnowTheme {
                         Surface {
                             Screen {
-                                HostOfComposables(savedInstanceState = savedInstanceState)
+                                HostOfComposables(savedInstanceState = savedInstanceState,cachedLocation = sharedPreferences)
                             }
                         }
                     }

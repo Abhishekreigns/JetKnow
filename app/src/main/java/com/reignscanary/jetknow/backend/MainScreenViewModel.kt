@@ -1,8 +1,10 @@
 package com.reignscanary.jetknow.backend
 
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -34,8 +36,7 @@ val isLoading : LiveData<Boolean> = _isLoading
     val listOfLatlngChanged : LiveData<Boolean> = _listOfLatlngChanged
     private val _onLocationFabClick = MutableLiveData(false)
     val onLocationFabClick : LiveData<Boolean> = _onLocationFabClick
-
-        // This function exists just to clear the list of latlng on dismissing a category(should find alternatives)
+    // This function exists just to clear the list of latlng on dismissing a category(should find alternatives)
     fun onListOfLatLngChanged(newListOfLatLng :HashMap<LatLng,String>)
     {
             _isLoading.value = true
